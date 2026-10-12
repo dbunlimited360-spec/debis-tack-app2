@@ -40,6 +40,8 @@ In Netlify: **Site configuration → Environment variables → Add a variable**.
 Then **Deploys → Trigger deploy → Deploy site** so the settings take effect.
 
 ### 4. First use
+
+App address: https://effervescent-lily-e9ad61.netlify.app
 1. On her phone, open the Netlify address (for example `https://debis-tack.netlify.app`) in Safari.
 2. Sign in with the password.
 3. Tap **Bring them in** to load the products already on the website.

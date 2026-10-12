@@ -1,0 +1,13 @@
+{
+  "name": "debis-tack-consignment",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Phone app for Debi's Tack Boutique consignment: inventory, consignors, payouts, Wix store sync and social sharing.",
+  "scripts": {
+    "test": "node test/run.mjs"
+  },
+  "dependencies": {
+    "@netlify/blobs": "11.1.0"
+  }
+}

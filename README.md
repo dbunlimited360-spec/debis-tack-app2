@@ -54,6 +54,8 @@ App address: https://effervescent-lily-e9ad61.netlify.app
 - **Sold / On hold:** a Sold or On Hold ribbon goes on, and it's marked out of stock so it can't be bought online.
 - **After the waiting days (3 by default):** the app offers to hide sold items from the store.
 - **Delete:** removes the product from Wix too.
+- **Website categories:** each item has a category picker filled from the store's own categories. The app suggests one from the name and type; tap to change. Changing it moves the product between categories on Wix.
+- **Picked up by consignor:** takes the item out of inventory and deletes it from the store without counting it as a sale. It's kept in the consignor's history as "picked up".
 
 If Wix rejects a change, the item shows "Website not updated" with the reason and a Try again button. Nothing is lost.
 

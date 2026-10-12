@@ -126,3 +126,36 @@ step("a website error is saved on the item instead of losing it");
 assert.equal((await req("GET", "/img?u=" + encodeURIComponent("https://evil.example/x.jpg"))).status, 400);
 step("photo proxy only fetches website photos");
 console.log("\nAll tests passed.");
+
+// ---- store categories + consignor pick-up ----
+{
+  const calls2 = [];
+  const prods2 = { "p-c1": { id: "p-c1", name: "Stetson", description: "<p>hat</p>", priceData: { price: 100 }, stock: { inStock: true }, createdDate: "2026-09-01",
+    collectionIds: ["00000000-000000-000000-000000000001", "707a03fc-f42c-ce40-b7a6-6eefde730b4e"], productPageUrl: { base: "https://x/", path: "/p" }, media: { items: [] } } };
+  let k = 0;
+  const f2 = async (url, init) => { const u = new URL(url); const body = init.body ? JSON.parse(init.body) : null; calls2.push([init.method, u.pathname, body]);
+    if (u.pathname === "/stores-reader/v1/products/query") return new Response(JSON.stringify({ products: Object.values(prods2) }));
+    if (u.pathname === "/stores-reader/v1/collections/query") return new Response(JSON.stringify({ collections: [{ id: "00000000-000000-000000-000000000001", name: "All Products" }, { id: "707a03fc-f42c-ce40-b7a6-6eefde730b4e", name: "Western Hats", visible: true }, { id: "d4848a8e-4a16-4e81-9d02-cff367b61b11", name: "Saddles", visible: true }] }));
+    if (init.method === "POST" && u.pathname === "/stores/v1/products") return new Response(JSON.stringify({ product: { id: "p-n" + (++k) } }));
+    return new Response("{}"); };
+  const st2 = memStore();
+  const h = makeHandler({ store: st2, wix: makeWix({ apiKey: "KEY", siteId: "SITE", fetchImpl: f2 }), env: { APP_PASSWORD: "pw", URL: "https://x" } });
+  const call = async (m, p, b) => { const r = await h(new Request("https://x/api" + p, { method: m, headers: { authorization: "Bearer " + tk, "content-type": "application/json" }, body: b ? JSON.stringify(b) : undefined })); return r.json(); };
+  let tk = ""; tk = (await call("POST", "/login", { password: "pw" })).token;
+  const cols = (await call("GET", "/collections")).collections; assert.equal(cols.length, 2, "All Products is left out");
+  await call("POST", "/import", {});
+  let s2 = await call("GET", "/state"); assert.deepEqual(s2.items[0].collections, ["707a03fc-f42c-ce40-b7a6-6eefde730b4e"]);
+  calls2.length = 0;
+  const r1 = await call("POST", "/items", { title: "Saddle", cat: "saddles", price: 500, status: "available", toWix: true, collections: ["d4848a8e-4a16-4e81-9d02-cff367b61b11"] });
+  assert.ok(calls2.some(c => c[1] === "/stores/v1/collections/d4848a8e-4a16-4e81-9d02-cff367b61b11/productIds" && c[2].productIds[0] === "p-n1"));
+  calls2.length = 0;
+  await call("POST", "/items", { id: r1.item.id, title: "Saddle", cat: "saddles", price: 500, status: "available", toWix: true, collections: ["707a03fc-f42c-ce40-b7a6-6eefde730b4e"] });
+  assert.ok(calls2.some(c => c[1].endsWith("707a03fc-f42c-ce40-b7a6-6eefde730b4e/productIds")));
+  assert.ok(calls2.some(c => c[1].endsWith("d4848a8e-4a16-4e81-9d02-cff367b61b11/productIds/delete")));
+  console.log("✓ new items go into the chosen store categories; changing them moves the product");
+  calls2.length = 0;
+  const rr = await call("POST", `/items/${r1.item.id}/return`, {}); assert.equal(rr.ok, true);
+  assert.ok(calls2.some(c => c[0] === "DELETE" && c[1] === "/stores/v1/products/p-n1"));
+  s2 = await call("GET", "/state"); assert.ok(!s2.items.find(i => i.id === r1.item.id)); assert.equal(s2.archive.find(i => i.id === r1.item.id).status, "returned");
+  console.log("✓ picked-up items leave inventory and the website, and are kept as returned (not sold)");
+}

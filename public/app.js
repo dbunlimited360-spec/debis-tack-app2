@@ -12,7 +12,43 @@ var MAXPH = 8;
 
 var S = null;
 var ui = { tab: "inventory", invFilter: "all", q: "", confirmPay: null };
-var form = { photos: [], editing: null, uploading: 0 };
+var form = { photos: [], editing: null, uploading: 0, cols: [], colsTouched: false };
+var COLS = null; // website store categories
+var COL_RULES = [
+  [/english|close contact|\bjump|dressage|crosby|collegiate/, /saddle/, "English Saddles"],
+  [null, /saddle(?! ?pad)/, "Western Saddle"],
+  [null, /\bhats?\b|stetson|greeley|serratelli|bailey|resistol|shorty|cruel girl|smokey mountain/, "Western Hats"],
+  [null, /showmanship/, "Showmanship Jackets"],
+  [null, /jacket/, "Western Show Jackets"],
+  [null, /youth/, "Western Show Youth"],
+  [null, /shirt|\bvest\b|horsemanship/, "Western Show Shirts"],
+  [null, /\bboots?\b|ariat|dinero/, "Boots"],
+  [null, /chaps|chinks/, "Chaps"],
+  [null, /show pad|saddle ?pad|\bpad\b/, "Western Show Pad"],
+  [null, /blanket|\bsheet\b|cooler|liner|big d|neck cover/, "Horse Blankets"],
+  [null, /\bbits?\b/, "Bits"],
+  [null, /headstall|bridle/, "Headstalls"],
+  [null, /halter/, "Halters"],
+  [null, /\bspurs?\b|mylers|dale chavez/, "Spurs"]
+];
+function suggestCols(title, desc, cat) {
+  if (!COLS || !COLS.length) return [];
+  var t = (title + " " + desc).toLowerCase(), names = [];
+  var catHint = { saddles: " saddle", bits: " bit", headstalls: " headstall", pads: " pad", apparel: "", other: "" }[cat] || "";
+  var tt = t + catHint;
+  COL_RULES.forEach(function (r) {
+    if (names.length >= 2) return;
+    if (r[0] && !r[0].test(tt)) return;
+    if (!r[1].test(tt)) return;
+    if (r[2] === "Western Saddle" && names.indexOf("English Saddles") >= 0) return;
+    if (r[2] === "Western Show Jackets" && names.indexOf("Showmanship Jackets") >= 0) return;
+    if (r[2] === "Western Show Pad" && /blanket|sheet|cooler/.test(tt)) return;
+    if (r[2] === "Boots" && /fly boot/.test(tt)) return;
+    names.push(r[2]);
+  });
+  if (!names.length) names.push("Horse Accessories");
+  return names.map(function (n) { var c = COLS.find(function (c) { return c.name.toLowerCase() === n.toLowerCase(); }); return c && c.id; }).filter(Boolean);
+}
 var token = null;
 try { token = localStorage.getItem("tc-token"); } catch (e) {}
 try { var t0 = sessionStorage.getItem("tc-tab"); if (t0) ui.tab = t0; } catch (e) {}
@@ -63,7 +99,11 @@ async function api(path, body, opts) {
   if (!res.ok) throw new Error(data.error || "Something went wrong. Try again.");
   return data;
 }
-async function refresh() { S = await api("/state"); render(); }
+async function refresh() {
+  S = await api("/state");
+  if (S.wixReady && !COLS) { try { COLS = (await api("/collections")).collections || []; } catch (e) { COLS = null; } }
+  render();
+}
 function signOut() { token = null; try { localStorage.removeItem("tc-token"); } catch (e) {} S = null; renderLogin(); }
 
 /* ---------- login ---------- */
@@ -155,7 +195,8 @@ function webLine(it) {
 function consignorStats(cid) {
   var r = { inShop: 0, sold: 0, owed: 0 };
   S.items.forEach(function (it) { if (it.consignorId !== cid) return; if (it.status === "sold") { r.sold++; if (!it.paidDate) r.owed += (it.soldPrice || 0) * (it.split || 0) / 100; } else r.inShop++; });
-  (S.archive || []).forEach(function (it) { if (it.consignorId === cid) r.sold++; });
+  r.returned = 0;
+  (S.archive || []).forEach(function (it) { if (it.consignorId !== cid) return; if (it.status === "returned") r.returned++; else r.sold++; });
   return r;
 }
 function renderConsignors() {
@@ -163,7 +204,7 @@ function renderConsignors() {
   var list = Object.keys(S.consignors).map(function (k) { return S.consignors[k]; }).sort(function (a, b) { return a.name.localeCompare(b.name); });
   if (!list.length) return h + '<div class="empty">No consignors yet. Add the people who bring you tack, then pick them when you tag an item.</div>';
   return h + '<div class="list">' + list.map(function (c) { var s = consignorStats(c.id);
-    return '<button class="ccard" data-act="editC" data-id="' + c.id + '"><span class="nm">' + esc(c.name) + '</span><span class="ln">' + (c.phone ? '<span>' + esc(c.phone) + '</span>' : '') + '<span><b>' + s.inShop + '</b> in shop</span><span><b>' + s.sold + '</b> sold</span>' + (s.owed ? '<span class="owe"><b class="owe">' + money(s.owed) + '</b> owed</span>' : '') + '</span></button>'; }).join("") + '</div>';
+    return '<button class="ccard" data-act="editC" data-id="' + c.id + '"><span class="nm">' + esc(c.name) + '</span><span class="ln">' + (c.phone ? '<span>' + esc(c.phone) + '</span>' : '') + '<span><b>' + s.inShop + '</b> in shop</span><span><b>' + s.sold + '</b> sold</span>' + (s.returned ? '<span><b>' + s.returned + '</b> picked up</span>' : '') + (s.owed ? '<span class="owe"><b class="owe">' + money(s.owed) + '</b> owed</span>' : '') + '</span></button>'; }).join("") + '</div>';
 }
 function renderPayouts() {
   var month = today().slice(0, 7), owedTot = 0, cut = 0, soldM = 0, soldN = 0, groups = {}, paid = [];
@@ -222,6 +263,8 @@ function closeSheet() { var d = document.getElementById("sheet"); if (d) d.remov
 function openItemForm(id) {
   var it = id ? item(id) : null;
   form.editing = id || null; form.photos = it && it.photos ? it.photos.slice() : [];
+  form.colsTouched = !!(it && Array.isArray(it.collections) && it.collections.length);
+  form.cols = it && Array.isArray(it.collections) ? it.collections.slice() : [];
   var cat = it ? it.cat : "saddles";
   var cs = Object.keys(S.consignors).map(function (k) { return S.consignors[k]; }).sort(function (a, b) { return a.name.localeCompare(b.name); });
   var b = '<form class="f" id="itemForm">';
@@ -229,6 +272,7 @@ function openItemForm(id) {
   b += fl("What is it?", '<input class="field" id="f-title" name="title" required maxlength="80" value="' + esc(it ? it.title : "") + '" placeholder="15½&quot; Barrel Saddle, FQHB">');
   b += '<div class="two">' + fl("Type", '<select class="field" id="f-cat" name="cat">' + CATS.map(function (c) { return '<option value="' + c[0] + '"' + (c[0] === cat ? " selected" : "") + '>' + esc(c[1]) + '</option>'; }).join("") + '</select>') +
     fl("Price ($)", '<input class="field" id="f-price" name="price" type="number" inputmode="decimal" min="0" step="0.01" required value="' + esc(it ? it.price : "") + '">') + '</div>';
+  if (S.wixReady && COLS && COLS.length) b += '<div class="fl"><span>Website categories</span><div class="chips" id="colchips" style="flex-wrap:wrap;overflow:visible"></div><small>Tap to change. The app suggests one from the name and type.</small></div>';
   b += '<div class="two">' + fl("Condition", '<select class="field" id="f-cond" name="cond"><option value=""' + (it && !it.cond ? " selected" : "") + '>Not set</option>' + CONDS.map(function (c) { return '<option' + ((it ? it.cond : "Good") === c ? " selected" : "") + '>' + c + '</option>'; }).join("") + '</select>') +
     fl("Size", '<input class="field" id="f-size" name="size" value="' + esc(it ? it.size : "") + '" placeholder="' + esc(SIZE_HINT[cat]) + '">') + '</div>';
   b += fl("Maker / brand", '<input class="field" id="f-brand" name="brand" value="' + esc(it ? it.brand : "") + '" placeholder="Optional">');
@@ -243,11 +287,18 @@ function openItemForm(id) {
   b += fl("Notes", '<input class="field" id="f-notes" name="notes" value="' + esc(it ? it.notes || "" : "") + '" placeholder="Lowest price OK, pick-up date, etc.">');
   b += '</div><p id="formErr" class="err" hidden></p>';
   b += '<div class="actions"><button class="btn" type="submit">' + (it ? "Save changes" : "Add to shop") + '</button>' + (it ? '<button class="btn quiet" type="button" data-act="askDel">Delete</button>' : '') + '</div>';
+  if (it && it.status !== "sold") b += '<div class="panel" style="margin-top:4px"><b>Consignor picked it up?</b><p class="note" style="margin:4px 0 10px">Takes it out of inventory and off the website. It is not counted as a sale.</p><button class="btn quiet" type="button" data-act="askReturn">Picked up by consignor</button><div id="returnRow" class="banner" hidden><p>Return Tag ' + tagNo(it.tag) + (it.consignorId && cname(it.consignorId) ? ' to ' + esc(cname(it.consignorId)) : '') + '?</p><button class="btn sm" type="button" data-act="returnItem" data-id="' + it.id + '">Yes, picked up</button></div></div>';
   if (it) b += '<div id="delRow" class="banner" hidden><p>Delete Tag ' + tagNo(it.tag) + '? It\'s removed from the website too.</p><button class="btn danger sm" type="button" data-act="del" data-id="' + it.id + '">Delete</button></div>';
   b += '</form>';
   var head = it && it.status !== "sold" ? '<button class="btn share sm" type="button" data-act="share" data-id="' + it.id + '">Share</button>' : '';
   openSheet(it ? "Tag " + tagNo(it.tag) : "New item · Tag " + tagNo(S.nextTag), b, head);
   drawPhotos();
+  if (!form.colsTouched) form.cols = suggestCols(it ? it.title : "", it ? it.desc || "" : "", cat);
+  drawCols();
+}
+function drawCols() {
+  var el = document.getElementById("colchips"); if (!el) return;
+  el.innerHTML = (COLS || []).map(function (c) { return '<button type="button" class="chip" data-act="col" data-id="' + c.id + '" aria-pressed="' + (form.cols.indexOf(c.id) >= 0) + '">' + esc(c.name) + (c.visible ? '' : '<small>hidden</small>') + '</button>'; }).join("");
 }
 function drawPhotos() {
   var el = document.getElementById("photostrip"); if (!el) return;
@@ -282,7 +333,9 @@ function openConsignor(id) {
   var b = '<form class="f" id="cForm" data-id="' + (id || "") + '">' + fl("Name", '<input class="field" id="c-name" name="name" required value="' + esc(c.name) + '">') +
     '<div class="two">' + fl("Phone", '<input class="field" id="c-phone" name="phone" type="tel" value="' + esc(c.phone) + '">') + fl("Email", '<input class="field" id="c-email" name="email" type="email" value="' + esc(c.email) + '">') + '</div>' +
     fl("Notes", '<textarea class="field" id="c-notes" name="notes" placeholder="How they like to be paid, pick-up arrangements">' + esc(c.notes) + '</textarea>');
-  if (id) { var s = consignorStats(id); b += '<p class="note">' + s.inShop + ' in shop · ' + s.sold + ' sold · ' + money(s.owed) + ' owed</p>'; }
+  if (id) { var s = consignorStats(id); b += '<p class="note">' + s.inShop + ' in shop · ' + s.sold + ' sold · ' + s.returned + ' picked up · ' + money(s.owed) + ' owed</p>';
+    var back = (S.archive || []).filter(function (x) { return x.consignorId === id && x.status === "returned"; }).slice(-10).reverse();
+    if (back.length) b += '<p class="note" style="margin-top:-6px">Picked up: ' + back.map(function (x) { return 'Tag ' + tagNo(x.tag) + ' ' + esc(x.title) + ' (' + fmtDate(x.returnedAt) + ')'; }).join(", ") + '</p>'; }
   b += '<div class="actions"><button class="btn" type="submit">' + (id ? "Save" : "Add consignor") + '</button>' + (id ? '<button class="btn quiet" type="button" data-act="askDel">Delete</button>' : '') + '</div>';
   if (id) b += '<div id="delRow" class="banner" hidden><p>Delete ' + esc(c.name) + '? Their items stay but lose the consignor link.</p><button class="btn danger sm" type="button" data-act="delC" data-id="' + id + '">Delete</button></div>';
   openSheet(id ? "Consignor" : "New consignor", b + '</form>');
@@ -358,6 +411,7 @@ async function saveItem(f) {
   var cid = fd.get("consignorId") || "";
   var body = { id: form.editing || undefined, title: fd.get("title"), cat: fd.get("cat"), price: fd.get("price"), cond: fd.get("cond"), size: fd.get("size"), brand: fd.get("brand"), desc: fd.get("desc"), status: fd.get("status"),
     photos: form.photos.map(function (p) { return p.mediaId ? { src: p.src, mediaId: p.mediaId } : { key: p.key }; }),
+    collections: COLS && COLS.length ? form.cols.slice() : undefined,
     split: fd.get("split"), dateIn: fd.get("dateIn"), notes: fd.get("notes"), toWix: S.wixReady && S.settings.wixSync ? !!fd.get("toWix") : undefined };
   if (cid === "__new") { var nm = (fd.get("newName") || "").trim(); if (!nm) { err.textContent = "Type the new consignor's name, or pick one from the list."; err.hidden = false; return; } body.newConsignor = { name: nm, phone: fd.get("newPhone") }; }
   else body.consignorId = cid;
@@ -386,6 +440,9 @@ async function onClick(e) {
   else if (a === "copyLink") copyText(b.dataset.text, b, null, "Copy link only");
   else if (a === "unsell") { var r1 = await run("Putting it back on the rack…", function () { return api("/items/" + id + "/unsell", {}); }); if (r1) { await refresh(); toast(webNote(r1, "Tag " + tagNo(r1.item.tag) + " is available again")); } }
   else if (a === "sync") { var r2 = await run("Updating the website…", function () { return api("/items/" + id + "/sync", {}); }); if (r2) { await refresh(); toast(r2.ok ? "The website is up to date" : "The website still didn't accept it; see the item"); } }
+  else if (a === "col") { var ci = form.cols.indexOf(id); if (ci >= 0) form.cols.splice(ci, 1); else form.cols.push(id); form.colsTouched = true; drawCols(); }
+  else if (a === "askReturn") { var rr = document.getElementById("returnRow"); if (rr) rr.hidden = !rr.hidden; }
+  else if (a === "returnItem") { closeSheet(); var rt = await run("Taking it off the website…", function () { return api("/items/" + id + "/return", {}); }); if (rt) { await refresh(); toast("Tag " + tagNo(rt.item.tag) + " returned" + (rt.item.consignorId && cname(rt.item.consignorId) ? " to " + cname(rt.item.consignorId) : "") + (rt.note ? ". " + rt.note : " and taken off the website")); } }
   else if (a === "rmPhoto") { form.photos.splice(Number(b.dataset.i), 1); drawPhotos(); }
   else if (a === "askDel") { var d = document.getElementById("delRow"); if (d) d.hidden = !d.hidden; }
   else if (a === "del") { closeSheet(); var r3 = await run("Deleting…", function () { return api("/items/" + id + "/delete", {}); }); if (r3) { await refresh(); toast(r3.note ? "Deleted here. " + r3.note : "Deleted"); } }
@@ -402,7 +459,7 @@ async function onClick(e) {
 }
 async function onChange(e) {
   var t = e.target;
-  if (t.id === "f-cat") { var sz = document.getElementById("f-size"); if (sz) sz.placeholder = SIZE_HINT[t.value] || ""; }
+  if (t.id === "f-cat") { var sz = document.getElementById("f-size"); if (sz) sz.placeholder = SIZE_HINT[t.value] || ""; resuggest(); }
   else if (t.id === "f-consignor") { var nc = document.getElementById("newC"); if (nc) nc.hidden = t.value !== "__new"; if (t.value === "__shop") { var sp = document.getElementById("f-split"); if (sp) sp.value = 0; } }
   else if (t.id === "f-photo" && t.files && t.files.length) {
     var er = document.getElementById("photoErr"); er.hidden = true;
@@ -424,6 +481,13 @@ async function onSubmit(e) {
   else if (f.id === "settingsForm") { var sb = {}; ["shopName","phone","website","wixRibbon","wixFooter"].forEach(function (k) { sb[k] = fd.get(k) || ""; }); sb.defaultSplit = fd.get("defaultSplit"); sb.wixClearDays = fd.get("wixClearDays"); sb.wixSync = !!fd.get("wixSync");
     if (await run("Saving…", function () { return api("/settings", sb); }, "Shop details saved")) await refresh(); }
 }
+
+function resuggest() {
+  if (form.colsTouched) return;
+  var g = function (id) { var e = document.getElementById(id); return e ? e.value : ""; };
+  form.cols = suggestCols(g("f-title"), g("f-desc"), g("f-cat")); drawCols();
+}
+document.addEventListener("input", function (e) { if (e.target && (e.target.id === "f-title" || e.target.id === "f-desc")) resuggest(); });
 
 var r0 = root();
 r0.addEventListener("click", onClick); r0.addEventListener("change", onChange); r0.addEventListener("submit", onSubmit);

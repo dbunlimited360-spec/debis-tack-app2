@@ -1,0 +1,27 @@
+name: Fetch website photos
+on:
+  push:
+    branches: [website-photos]
+    paths: [photos/list.txt]
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download
+        run: |
+          cd photos
+          while read -r id url; do
+            [ -z "$id" ] && continue
+            curl -sSfL --retry 3 -o "$id.jpg" "$url" || echo "failed $id"
+          done < list.txt
+          ls | wc -l
+      - name: Commit
+        run: |
+          git config user.name "photo-bot"
+          git config user.email "photo-bot@users.noreply.github.com"
+          git add photos/*.jpg
+          git commit -m "Add website product photos" || echo "nothing"
+          git push

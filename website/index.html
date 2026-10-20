@@ -1,0 +1,676 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Debi's Tack Boutique</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500;0,6..96,600;1,6..96,500&family=Hanken+Grotesk:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: luxury saddlery showroom — oiled-leather dark ground, brass hardware accents, one 3D brass-rimmed logo medallion as the hero object; sections stack like rooms you walk through. */
+:root{
+  --bg:#F3F1EE; --bg2:#E9E5DF; --surface:#FFFFFF; --ink:#1E1712; --muted:#6E6258; --line:#D8D0C6;
+  --brass:#9B7230; --brass-hi:#C9A15B; --onbrass:#1A130D; --deep:#1E1712; --deep-ink:#F2EADF;
+  --glow:rgba(201,161,91,.28);
+  --display:"Bodoni Moda","Didot","Bodoni 72",Georgia,serif;
+  --body:"Hanken Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --s-1:.85rem; --s0:1rem; --s1:1.2rem; --s2:1.55rem; --s3:clamp(1.9rem,4vw,2.8rem); --s4:clamp(2.6rem,7vw,5rem);
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#13100D; --bg2:#1A1511; --surface:#1F1914; --ink:#F2EADF; --muted:#AF9F8E; --line:#3A2F26;
+  --brass:#C9A15B; --brass-hi:#E2C285; --onbrass:#17110C; --deep:#0D0B09; --deep-ink:#F2EADF;
+  --glow:rgba(201,161,91,.22); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#13100D; --bg2:#1A1511; --surface:#1F1914; --ink:#F2EADF; --muted:#AF9F8E; --line:#3A2F26;
+  --brass:#C9A15B; --brass-hi:#E2C285; --onbrass:#17110C; --deep:#0D0B09; --deep-ink:#F2EADF;
+  --glow:rgba(201,161,91,.22); color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:var(--s0);line-height:1.65;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);font-weight:500;line-height:1.05;margin:0;text-wrap:balance;letter-spacing:-.01em}
+h2{font-size:var(--s3)}
+h3{font-size:var(--s2)}
+p{margin:0;max-width:62ch}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
+.eyebrow{font-weight:600;font-size:var(--s-1);letter-spacing:.2em;text-transform:uppercase;color:var(--brass)}
+.muted{color:var(--muted)}
+section{padding-block:clamp(64px,10vw,120px)}
+.head{display:grid;gap:14px;margin-bottom:44px}
+
+/* Nav */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid transparent;transition:border-color .3s}
+.nav.scrolled{border-bottom-color:var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:14px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-mark{width:44px;height:47px;border-radius:10px;object-fit:cover;box-shadow:0 0 0 1px var(--line)}
+.logo span{font-family:var(--display);font-size:1.3rem;font-weight:600;white-space:nowrap}
+.links{display:flex;gap:26px;list-style:none;margin:0;padding:0}
+.links a{text-decoration:none;font-weight:500;font-size:.95rem;color:var(--muted);transition:color .2s}
+.links a:hover{color:var(--ink)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;font-family:var(--body);font-weight:600;font-size:.95rem;letter-spacing:.02em;padding:13px 24px;border-radius:999px;border:1px solid var(--brass);background:var(--brass);color:var(--onbrass);text-decoration:none;cursor:pointer;transition:transform .3s var(--ease),box-shadow .3s,background .3s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px -10px var(--glow);background:var(--brass-hi)}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--brass);background:transparent}
+.btn svg{width:16px;height:16px;transition:transform .3s var(--ease)}
+.btn:hover svg{transform:translateX(3px)}
+.nav .btn{padding:9px 18px}
+@media (max-width:900px){.links{display:none}}
+@media (max-width:420px){.nav .btn span{display:none}.logo span{font-size:1.1rem}}
+
+/* Hero */
+.hero{position:relative;padding-block:clamp(40px,6vw,72px) clamp(56px,8vw,96px);overflow:hidden}
+.hero::before{content:"";position:absolute;right:-10%;top:-20%;width:70vw;height:70vw;max-width:900px;max-height:900px;background:radial-gradient(circle,var(--glow),transparent 62%);pointer-events:none}
+.hero .wrap{position:relative;display:grid;grid-template-columns:1.05fr 1fr;gap:24px;align-items:center}
+.hero-copy{display:grid;gap:24px;min-width:0}
+.hero h1{font-size:var(--s4)}
+.hero h1 em{font-style:italic;color:var(--brass)}
+.hero .lede{font-size:var(--s1);color:var(--muted)}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
+.facts{display:flex;flex-wrap:wrap;gap:10px 28px;padding-top:10px;border-top:1px solid var(--line);font-size:.92rem;color:var(--muted)}
+.facts b{color:var(--ink);font-weight:600}
+.stage{position:relative;aspect-ratio:1/1;max-width:100%;min-width:0}
+#gl{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:pan-y}
+.stage .fallback{position:absolute;inset:14%;width:72%;height:72%;object-fit:contain;border-radius:50%}
+.stage.ready .fallback{display:none}
+.stage .tagline{position:absolute;left:50%;bottom:4%;transform:translateX(-50%);font-size:.75rem;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+@media (max-width:860px){.hero .wrap{grid-template-columns:1fr}.stage{max-width:440px;margin:0 auto;width:100%;order:-1}}
+
+/* Marquee */
+.marquee{border-block:1px solid var(--line);overflow:hidden;padding-block:18px;background:var(--bg2)}
+.track{display:flex;gap:48px;width:max-content;animation:scroll 40s linear infinite}
+.track span{font-family:var(--display);font-style:italic;font-size:1.5rem;white-space:nowrap;color:var(--muted);display:flex;align-items:center;gap:48px}
+.track span::after{content:"";width:7px;height:7px;border-radius:50%;background:var(--brass)}
+@keyframes scroll{to{transform:translateX(-50%)}}
+
+/* Services – 3D tilt cards */
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;perspective:1200px}
+.card{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:28px 24px;display:flex;flex-direction:column;gap:14px;text-decoration:none;transform-style:preserve-3d;transition:transform .5s var(--ease),box-shadow .5s,border-color .3s;will-change:transform}
+.card:hover{border-color:var(--brass);box-shadow:0 30px 60px -30px var(--glow)}
+.card .ic{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;background:var(--bg2);color:var(--brass);transform:translateZ(40px)}
+.card .ic svg{width:26px;height:26px}
+.card h3{transform:translateZ(30px)}
+.card p{color:var(--muted);font-size:.95rem;flex:1;transform:translateZ(20px)}
+.card .go{font-weight:600;font-size:.9rem;color:var(--brass);transform:translateZ(25px)}
+.card .shine{position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(circle at var(--mx,50%) var(--my,0%),var(--glow),transparent 55%);opacity:0;transition:opacity .3s}
+.card:hover .shine{opacity:1}
+@media (max-width:980px){.cards{grid-template-columns:1fr 1fr}}
+@media (max-width:540px){.cards{grid-template-columns:1fr}}
+
+/* Shop */
+.shop{background:var(--bg2)}
+.shop-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:28px;align-items:start}
+.shop-grid>*{min-width:0}
+.cat-cols{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.cat-cols h3{font-size:1.25rem;margin-bottom:10px}
+.cat-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.cat-list a{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 2px;border-bottom:1px solid var(--line);text-decoration:none;font-weight:500;transition:padding .3s var(--ease),color .2s}
+.cat-list a::after{content:"→";color:var(--brass);transition:transform .3s var(--ease)}
+.cat-list a:hover{padding-left:10px;color:var(--brass)}
+.cat-list a:hover::after{transform:translateX(4px)}
+.fit{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:26px;display:grid;gap:12px}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;font-size:.95rem}
+th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line)}
+th{font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+@media (max-width:860px){.shop-grid{grid-template-columns:1fr}}
+@media (max-width:480px){.cat-cols{grid-template-columns:1fr}}
+
+/* Inventory */
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.inv-tools{display:grid;gap:14px;margin-bottom:28px}
+.chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;font:inherit;font-size:.9rem;font-weight:500;padding:8px 16px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;transition:all .2s;white-space:nowrap}
+.chip small{color:var(--muted);margin-left:4px;font-variant-numeric:tabular-nums}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip[aria-pressed="true"] small{color:var(--bg);opacity:.7}
+.inv-row{display:flex;flex-wrap:wrap;gap:10px}
+.search{flex:1 1 260px;position:relative;display:block;text-transform:none;letter-spacing:0}
+.search svg{position:absolute;left:14px;top:50%;width:17px;height:17px;transform:translateY(-50%);color:var(--muted)}
+.search input{padding-left:40px;background:var(--surface);border-radius:999px}
+.sortl{flex:0 1 210px;display:block}
+.sortl select{background:var(--surface);border-radius:999px}
+.inv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px;perspective:1400px}
+.item{position:relative;display:flex;flex-direction:column;text-align:left;font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;cursor:pointer;padding:0;transition:transform .5s var(--ease),box-shadow .5s,border-color .3s;transform-style:preserve-3d}
+.item:hover{border-color:var(--brass);box-shadow:0 26px 50px -28px var(--glow)}
+.ph{position:relative;aspect-ratio:1/1;max-width:100%;background:var(--bg2);overflow:hidden}
+.ph img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .8s var(--ease)}
+.item:hover .ph img{transform:scale(1.05)}
+.ph .glyph{position:absolute;inset:0;display:none;place-items:center;color:var(--brass)}
+.ph .glyph svg{width:38%;height:38%;opacity:.55}
+.ph.noimg img{display:none}
+.ph.noimg .glyph{display:grid}
+.rib{position:absolute;top:12px;left:12px;font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;background:var(--brass);color:var(--onbrass);padding:4px 10px;border-radius:999px}
+.tagno{position:absolute;top:12px;right:12px;font-size:.72rem;font-weight:600;font-variant-numeric:tabular-nums;background:color-mix(in srgb,var(--surface) 88%,transparent);color:var(--muted);padding:4px 9px;border-radius:999px}
+.info{display:grid;gap:4px;padding:14px 16px 16px}
+.info .ct{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--brass);font-weight:600}
+.info b{font-weight:600;font-size:1.02rem;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.info .meta{font-size:.86rem;color:var(--muted);min-height:1.3em}
+.info .pr{font-family:var(--display);font-size:1.35rem;font-variant-numeric:tabular-nums;margin-top:4px}
+.inv-more{display:flex;justify-content:center;margin-top:32px}
+.inv-empty{text-align:center;padding:40px 0}
+dialog{border:0;padding:0;background:transparent;max-width:min(920px,calc(100vw - 24px));width:100%;color:var(--ink)}
+dialog::backdrop{background:rgba(10,8,6,.62);backdrop-filter:blur(4px)}
+.dlg{position:relative;display:grid;grid-template-columns:1fr 1fr;background:var(--surface);border-radius:22px;overflow:hidden;max-height:calc(100vh - 40px)}
+.dlg-img{background:var(--bg2);min-height:280px;position:relative}
+.dlg-img img{position:relative;z-index:1;width:100%;height:100%;object-fit:cover;display:block}
+.dlg-img .glyph{position:absolute;inset:0;display:grid;place-items:center;color:var(--brass)}
+.dlg-img .glyph svg{width:30%;opacity:.5}
+.dlg-body{padding:30px;display:grid;gap:12px;align-content:start;overflow-y:auto;min-width:0}
+.dlg-price{font-family:var(--display);font-size:1.8rem;font-variant-numeric:tabular-nums}
+.dlg-facts{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;margin:0;font-size:.95rem}
+.dlg-facts dt{color:var(--muted)}
+.dlg-facts dd{margin:0;font-weight:600}
+.note-sm{font-size:.85rem;color:var(--muted)}
+.dlg-x{position:absolute;top:12px;right:12px;z-index:2;width:38px;height:38px;border-radius:50%;border:0;background:var(--surface);color:var(--ink);font-size:1.5rem;line-height:1;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+@media (max-width:700px){.dlg{grid-template-columns:1fr}.dlg-img{min-height:0;aspect-ratio:1/1}}
+@media (max-width:480px){.inv-grid{grid-template-columns:1fr 1fr;gap:12px}.info{padding:12px}.info b{font-size:.95rem}.info .pr{font-size:1.15rem}}
+
+/* Consign steps */
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:24px;counter-reset:s;position:relative}
+.steps::before{content:"";position:absolute;left:0;right:0;top:22px;height:1px;background:linear-gradient(90deg,var(--brass),var(--line))}
+.steps li{position:relative;display:grid;gap:10px;counter-increment:s}
+.steps li::before{content:counter(s);width:44px;height:44px;border-radius:50%;background:var(--bg);border:1px solid var(--brass);color:var(--brass);display:grid;place-items:center;font-family:var(--display);font-size:1.25rem;position:relative}
+.steps b{font-family:var(--display);font-size:1.3rem;font-weight:500}
+.steps span{color:var(--muted);font-size:.95rem}
+.takes{margin-top:40px;display:flex;flex-wrap:wrap;gap:8px}
+.takes span{border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:.9rem;color:var(--muted)}
+@media (max-width:860px){.steps{grid-template-columns:1fr 1fr}.steps::before{display:none}}
+@media (max-width:480px){.steps{grid-template-columns:1fr}}
+
+/* Brokering band */
+.band{background:var(--deep);color:var(--deep-ink);border-radius:28px;overflow:hidden;position:relative}
+.band::after{content:"";position:absolute;left:-20%;bottom:-60%;width:80%;height:140%;background:radial-gradient(circle,rgba(201,161,91,.25),transparent 60%);pointer-events:none}
+.band .in{position:relative;z-index:1;display:grid;grid-template-columns:1.1fr 1fr;gap:40px;padding:clamp(28px,5vw,64px)}
+.band .in>*{min-width:0}
+.band .eyebrow{color:#E2C285}
+.band p{color:#CDBFAF}
+.checks{list-style:none;margin:0;padding:0;display:grid;gap:16px}
+.checks li{display:grid;grid-template-columns:28px 1fr;gap:12px;align-items:start}
+.checks svg{width:22px;height:22px;color:#E2C285;margin-top:3px}
+.checks b{display:block;font-weight:600;color:var(--deep-ink)}
+.band .btn.ghost{color:var(--deep-ink);border-color:#4A3D31}
+@media (max-width:860px){.band .in{grid-template-columns:1fr}}
+
+/* About */
+.about{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
+.about>*{min-width:0}
+.badge{width:min(280px,70%);height:auto;border-radius:24px;box-shadow:0 24px 60px -30px var(--glow),0 0 0 1px var(--line);transition:transform .8s var(--ease)}
+.badge:hover{transform:rotate(-2deg) scale(1.02)}
+.quote{font-family:var(--display);font-style:italic;font-size:clamp(1.6rem,3.4vw,2.4rem);line-height:1.2}
+.values{display:grid;gap:22px}
+.values div{display:grid;gap:4px;padding-left:18px;border-left:1px solid var(--brass)}
+.values b{font-family:var(--display);font-size:1.3rem;font-weight:500}
+@media (max-width:860px){.about{grid-template-columns:1fr;gap:32px}}
+
+/* Contact */
+.contact{background:var(--bg2)}
+.cgrid{display:grid;grid-template-columns:1fr 1.25fr;gap:40px;align-items:start}
+.cgrid>*{min-width:0}
+.info{display:grid;gap:22px}
+.info .row{display:grid;gap:4px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.info .v{font-size:1.15rem;font-weight:600;overflow-wrap:anywhere;user-select:all}
+.copy{justify-self:start;background:none;border:0;padding:0;color:var(--brass);font:inherit;font-size:.85rem;font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+form{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:clamp(20px,4vw,36px);display:grid;gap:16px}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+label{display:grid;gap:6px;font-size:.8rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+input,select,textarea{font:inherit;font-size:1rem;letter-spacing:0;text-transform:none;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px 14px;width:100%;transition:border-color .2s,box-shadow .2s}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brass);box-shadow:0 0 0 4px var(--glow)}
+textarea{min-height:110px;resize:vertical}
+.seg{display:flex;flex-wrap:wrap;gap:8px;border:0;padding:0;margin:0}
+.seg legend{font-size:.8rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;padding:0}
+.seg label{position:relative;text-transform:none;letter-spacing:0;font-size:.92rem}
+.seg input{position:absolute;opacity:0;width:1px;height:1px}
+.seg span{display:inline-block;padding:8px 16px;border:1px solid var(--line);border-radius:999px;color:var(--ink);cursor:pointer;font-weight:500;transition:all .2s}
+.seg input:checked+span{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.seg input:focus-visible+span{outline:2px solid var(--brass);outline-offset:2px}
+.receipt{border:1px solid var(--brass);border-radius:14px;padding:16px;display:grid;gap:10px}
+.receipt pre{white-space:pre-wrap;overflow-wrap:anywhere;margin:0;font-family:var(--body);font-size:.92rem;background:var(--bg);padding:12px;border-radius:10px}
+.err{color:var(--brass);font-weight:600}
+@media (max-width:860px){.cgrid{grid-template-columns:1fr}}
+@media (max-width:480px){.f2{grid-template-columns:1fr}}
+
+footer{background:var(--deep);color:var(--deep-ink)}
+footer .wrap{padding-block:48px;display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:32px}
+footer .brand{font-family:var(--display);font-size:1.6rem}
+footer p,footer li{color:#B9AA99;font-size:.92rem}
+footer ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+footer a{text-decoration:none;color:#B9AA99}
+footer a:hover{color:#E2C285}
+footer h4{margin:0 0 10px;font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;color:#E2C285}
+.legal{border-top:1px solid #2E251D}
+.legal .wrap{padding-block:18px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;font-size:.82rem;color:#8E7F70;grid-template-columns:none}
+@media (max-width:760px){footer .wrap{grid-template-columns:1fr}}
+
+/* Reveal motion (content is visible at rest; only off-screen items are staged) */
+.rv{transition:transform 1s var(--ease),opacity 1s var(--ease)}
+.rv.stage-in{transform:translateY(36px) rotateX(8deg);opacity:.001}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .track{animation:none}
+  .rv,.rv.stage-in{transform:none;opacity:1;transition:none}
+  .card{transition:none}
+}
+</style>
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+
+
+<nav class="nav" id="nav">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="Debi's Tack Boutique home">
+      <img class="logo-mark" src="https://static.wixstatic.com/media/f2cfaf_7ecd5e333f904629a581b834188fab90~mv2.jpeg/v1/crop/x_790,y_140,w_1240,h_1320/fill/w_176,h_187,al_c,q_88/logo.jpg" alt="" width="44" height="47">
+      <span>Debi's Tack Boutique</span>
+    </a>
+    <ul class="links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#shop">Shop</a></li>
+      <li><a href="#consign">Consign</a></li>
+      <li><a href="#brokering">Horses</a></li>
+      <li><a href="#about">About</a></li>
+    </ul>
+    <a class="btn" href="#contact"><span>Get in touch</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="hero-copy">
+      <span class="eyebrow">Salem, Oregon · Family owned since 2023</span>
+      <h1>Quality tack, in <em>trusted</em> hands.</h1>
+      <p class="lede">Consigned saddles, headstalls, bits and show wear, cleaned and inspected by hand. Plus professional tack cleaning and honest horse brokering for riders across the Willamette Valley.</p>
+      <div class="cta">
+        <a class="btn" href="#shop">Shop the collection <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+        <a class="btn ghost" href="#consign">Consign your gear</a>
+      </div>
+      <div class="facts"><span><b>61 pieces</b> in stock now</span><span><b>Hand-cleaned</b> every piece</span><span><b>By appointment</b> · 971-388-2020</span></div>
+    </div>
+    <div class="stage" id="stage" aria-hidden="true">
+      <img class="fallback" src="https://static.wixstatic.com/media/f2cfaf_7ecd5e333f904629a581b834188fab90~mv2.jpeg/v1/crop/x_790,y_140,w_1240,h_1320/fill/w_560,h_596,al_c,q_86/logo.jpg" alt="" width="560" height="596">
+      <canvas id="gl"></canvas>
+      <span class="tagline">Drag to spin</span>
+    </div>
+  </div>
+</header>
+
+<div class="marquee" aria-hidden="true"><div class="track" id="track"></div></div>
+
+<section id="services">
+  <div class="wrap">
+    <div class="head rv"><span class="eyebrow">What we do</span><h2>Everything for horse and rider, under one roof.</h2></div>
+    <div class="cards">
+      <a class="card rv" href="#shop"><span class="shine"></span>
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13c2-4 5-6 9-6s7 2 9 6"/><path d="M6 11c1 3 3 5 6 5s5-2 6-5"/><path d="M12 16v5M9 21h6"/></svg></span>
+        <h3>Shop</h3><p>Western and English saddles, pads, headstalls, bits, spurs, show wear and boots.</p><span class="go">Browse the collection →</span></a>
+      <a class="card rv" href="#consign"><span class="shine"></span>
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h16v12H4z"/><path d="M8 8V6a4 4 0 0 1 8 0v2"/><path d="M9 14l2 2 4-4"/></svg></span>
+        <h3>Consign</h3><p>Turn the tack sitting in your barn into cash. We clean it, list it and handle the sale.</p><span class="go">How it works →</span></a>
+      <a class="card rv" href="#contact" data-type="Tack cleaning"><span class="shine"></span>
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.2L18 9l-4.2 1.8L12 15l-1.8-4.2L6 9l4.2-1.8z"/><path d="M18 15l.9 2.1L21 18l-2.1.9L18 21l-.9-2.1L15 18l2.1-.9z"/></svg></span>
+        <h3>Tack Cleaning</h3><p>Hand cleaning and conditioning for saddles, bridles, breast collars and show silver.</p><span class="go">Book a drop-off →</span></a>
+      <a class="card rv" href="#brokering"><span class="shine"></span>
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 21v-8c0-4 2-7 6-8l1-2 1 3c3 1 4 3 4 6l-3 1-2-2-2 3v7"/></svg></span>
+        <h3>Horse Brokering</h3><p>Buying or selling a horse? We match riders and horses with care and honesty.</p><span class="go">Find a match →</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="shop" id="shop">
+  <div class="wrap">
+    <div class="head rv"><span class="eyebrow">In the boutique now</span><h2>New and gently used, ready to ride.</h2><p class="muted"><span id="inv-count">61</span> consigned pieces in stock, each tagged, cleaned and inspected. Updated <span id="inv-date">Oct 19, 2026</span>.</p></div>
+    <div class="inv-tools rv">
+      <div class="chips" id="inv-chips" role="group" aria-label="Filter by category"></div>
+      <div class="inv-row">
+        <label class="search"><span class="sr">Search inventory</span><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="9" r="6"/><path d="M14 14l4 4"/></svg><input id="inv-q" type="search" placeholder="Search brand, size or tag number"></label>
+        <label class="sortl"><span class="sr">Sort</span><select id="inv-sort"><option value="new">Newest first</option><option value="lo">Price: low to high</option><option value="hi">Price: high to low</option></select></label>
+      </div>
+    </div>
+    <div class="inv-grid" id="inv-grid"></div>
+    <p class="muted inv-empty" id="inv-empty" hidden>Nothing matches that yet. Try another word, or send us a wish list and we'll watch for it.</p>
+    <div class="inv-more"><button class="btn ghost" id="inv-more" type="button">Show more</button></div>
+
+    <dialog id="item-dlg" aria-labelledby="dlg-title">
+      <div class="dlg">
+        <button class="dlg-x" id="dlg-x" type="button" aria-label="Close">×</button>
+        <div class="dlg-img" id="dlg-img"></div>
+        <div class="dlg-body">
+          <span class="eyebrow" id="dlg-cat"></span>
+          <h3 id="dlg-title"></h3>
+          <div class="dlg-price" id="dlg-price"></div>
+          <dl class="dlg-facts" id="dlg-facts"></dl>
+          <p class="muted" id="dlg-desc"></p>
+          <p class="note-sm">Buyer pays shipping. Pickup in Salem by appointment.</p>
+          <div class="cta"><a class="btn" id="dlg-buy" href="#" target="_blank" rel="noopener">View &amp; buy on our store</a><a class="btn ghost" id="dlg-ask" href="#contact">Ask about this item</a></div>
+        </div>
+      </div>
+    </dialog>
+
+    <div class="shop-grid" style="margin-top:56px">
+      <div class="rv" style="display:grid;gap:12px;align-content:start">
+        <span class="eyebrow">Looking for something specific?</span>
+        <h3>Send us a wish list.</h3>
+        <p class="muted">New consignments come in every week. Tell us the seat size, gullet, discipline or brand you're after and we'll let you know when it arrives.</p>
+        <div><a class="btn ghost" href="#contact" data-type="Shopping question">Send a wish list</a></div>
+      </div>
+      <div class="fit rv">
+        <span class="eyebrow">Saddle fit guide</span>
+        <h3>Find your seat size</h3>
+        <p class="muted" style="font-size:.95rem">Every saddle we list includes seat size and tree width. Use this as a starting point, then come try it on.</p>
+        <div class="tbl"><table>
+          <thead><tr><th>Western</th><th>English</th><th>Typical rider</th></tr></thead>
+          <tbody>
+            <tr><td>13"</td><td>15"–16"</td><td>Youth, small adult</td></tr>
+            <tr><td>14"</td><td>16.5"</td><td>Small to average adult</td></tr>
+            <tr><td>15"</td><td>17"</td><td>Average adult</td></tr>
+            <tr><td>16"</td><td>17.5"</td><td>Larger adult</td></tr>
+            <tr><td>17"</td><td>18"+</td><td>Tall or larger adult</td></tr>
+          </tbody></table></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="consign">
+  <div class="wrap">
+    <div class="head rv"><span class="eyebrow">Consignment</span><h2>Good gear deserves a second ride.</h2><p class="muted">Outgrown a saddle or changed disciplines? We'll put your tack in front of riders who need it.</p></div>
+    <ol class="steps rv">
+      <li><b>Tell us what you have</b><span>Send a few details and photos through the form below.</span></li>
+      <li><b>Bring it in</b><span>We set a drop-off time in Salem and agree on a price together.</span></li>
+      <li><b>We clean and list it</b><span>Your item is cleaned, conditioned, photographed and listed.</span></li>
+      <li><b>You get paid</b><span>We contact you as soon as it sells. Call for current terms.</span></li>
+    </ol>
+    <div class="takes rv"><span>Western saddles</span><span>English saddles</span><span>Show pads</span><span>Headstalls</span><span>Bits</span><span>Spurs</span><span>Blankets</span><span>Show shirts &amp; jackets</span><span>Chaps</span><span>Boots</span><span>Hats</span></div>
+    <div style="margin-top:36px" class="rv"><a class="btn" href="#contact" data-type="Consignment">Start a consignment <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div>
+  </div>
+</section>
+
+<section id="brokering" style="padding-top:0">
+  <div class="wrap">
+    <div class="band rv">
+      <div class="in">
+        <div style="display:grid;gap:18px;align-content:start">
+          <span class="eyebrow">Horse brokering</span>
+          <h2>The right horse is about fit, not just price.</h2>
+          <p>We listen to what you need, ask the hard questions, and connect buyers and sellers we'd trust ourselves. Pre-purchase vet exams are always encouraged.</p>
+          <div class="cta"><a class="btn" href="#contact" data-type="Buying a horse">I'm buying</a><a class="btn ghost" href="#contact" data-type="Selling a horse">I'm selling</a></div>
+        </div>
+        <ul class="checks">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l4 4 10-10"/></svg><div><b>Discipline and goals</b><p>Trail, ranch, reining, barrels, showmanship or a safe first horse.</p></div></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l4 4 10-10"/></svg><div><b>Size and experience</b><p>Height in hands, age and rider level, matched with care.</p></div></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l4 4 10-10"/></svg><div><b>Honest history</b><p>Temperament, training and any quirks, disclosed up front.</p></div></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l4 4 10-10"/></svg><div><b>Through to the sale</b><p>Visits, test rides and paperwork, handled for both sides.</p></div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about" style="padding-top:0">
+  <div class="wrap about">
+    <div class="rv" style="display:grid;gap:22px">
+      <img class="badge" src="https://static.wixstatic.com/media/f2cfaf_7ecd5e333f904629a581b834188fab90~mv2.jpeg/v1/crop/x_790,y_140,w_1240,h_1320/fill/w_560,h_596,al_c,q_86/logo.jpg" alt="Debi's Tack Boutique logo: a tooled Western saddle inside a horseshoe, with the words Quality Used Horse Tack" width="560" height="596" loading="lazy">
+      <span class="eyebrow">About us</span>
+      <p class="quote">Good tack is built to last for decades. We make sure it keeps working for the next rider.</p>
+      <p class="muted">Debi's Tack Boutique is a family-owned shop in Salem, Oregon. Since 2023 we've helped riders buy and sell quality used tack, kept gear in top shape with hands-on cleaning, and matched people with the right horse.</p>
+    </div>
+    <div class="values rv">
+      <div><b>Honest</b><span class="muted">We describe condition the way it is, flaws included, for tack and for horses.</span></div>
+      <div><b>Hands-on</b><span class="muted">Every saddle and bridle is cleaned and inspected by us, never sent out.</span></div>
+      <div><b>Horse-first</b><span class="muted">A good fit for horse and rider matters more to us than a quick sale.</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div class="head rv"><span class="eyebrow">Contact</span><h2>Let's talk tack.</h2><p class="muted">Visits are by appointment so someone is always there to help. Call, text or send a request.</p></div>
+    <div class="cgrid">
+      <div class="info rv">
+        <div class="row"><span class="eyebrow">Call or text</span><span class="v">971-388-2020</span><button class="copy" data-c="971-388-2020">Copy number</button></div>
+        <div class="row"><span class="eyebrow">Email</span><span class="v">debistackboutique@gmail.com</span><button class="copy" data-c="debistackboutique@gmail.com">Copy email</button></div>
+        <div class="row"><span class="eyebrow">Showroom</span><span class="v">6575 Lardon Rd NE<br>Salem, OR 97305</span><a class="copy" href="https://www.google.com/maps/search/?api=1&query=6575+Lardon+Rd+NE+Salem+OR+97305" target="_blank" rel="noopener">Get directions</a></div>
+      </div>
+      <form id="form" class="rv" novalidate>
+        <fieldset class="seg"><legend>How can we help?</legend>
+          <label><input type="radio" name="Request" id="r1" value="Consignment" checked><span>Consign</span></label>
+          <label><input type="radio" name="Request" id="r2" value="Tack cleaning"><span>Tack cleaning</span></label>
+          <label><input type="radio" name="Request" id="r3" value="Buying a horse"><span>Buy a horse</span></label>
+          <label><input type="radio" name="Request" id="r4" value="Selling a horse"><span>Sell a horse</span></label>
+          <label><input type="radio" name="Request" id="r5" value="Shopping question"><span>Shopping</span></label>
+        </fieldset>
+        <div class="f2">
+          <label>Name<input id="f-name" name="Name" required autocomplete="name"></label>
+          <label>Phone<input id="f-phone" name="Phone" type="tel" required autocomplete="tel"></label>
+        </div>
+        <label>Email<input id="f-email" name="Email" type="email" autocomplete="email"></label>
+        <label><span id="detail-label">Item and size</span><input id="f-detail" name="Details" placeholder="e.g. 15&quot; Circle Y trail saddle, medium tree"></label>
+        <label>Message<textarea id="f-msg" name="Message" placeholder="Anything else we should know"></textarea></label>
+        <button class="btn" type="submit">Prepare my request <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
+        <div id="out" aria-live="polite"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div style="display:grid;gap:10px;justify-items:start"><img src="https://static.wixstatic.com/media/f2cfaf_7ecd5e333f904629a581b834188fab90~mv2.jpeg/v1/crop/x_790,y_140,w_1240,h_1320/fill/w_176,h_187,al_c,q_88/logo.jpg" alt="Debi's Tack Boutique logo" width="88" height="94" style="border-radius:14px" loading="lazy"><span class="brand">Debi's Tack Boutique</span><p>Consignment tack, tack cleaning and horse brokering in Salem, Oregon.</p></div>
+    <div><h4>Visit</h4><ul><li>6575 Lardon Rd NE</li><li>Salem, OR 97305</li><li>971-388-2020</li><li>By appointment</li></ul></div>
+    <div><h4>Also from our family</h4><ul><li><a href="https://www.debisbrew.com" target="_blank" rel="noopener">Debi's Saddle Up Coffee →</a></li><li><a href="https://www.debistackboutique.com/book-online" target="_blank" rel="noopener">Cleaning calendar →</a></li></ul></div>
+  </div>
+  <div class="legal"><div class="wrap"><span>© 2026 Debi's Tack Boutique, LLC</span><span>Family owned in Salem, Oregon</span></div></div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* Inventory: snapshot of the Wix store that the consignment app keeps in sync */
+const INV=[{"id":"64082e18-c0d0-4484-8967-b7ce5b09d2cc","n":"Custom Collars","c":"Show Wear","p":600,"r":"New Arrival","s":"Women’s 8","m":"Custom Collars","k":"Excellent","t":"0172","d":"Custom Collars complete SMS suit with shirt and pants. Women’s size 8","img":"f2cfaf_a44bb735ea1b4fbe975e82ae255d297e~mv2.jpg","ar":0.728,"u":"https://www.debistackboutique.com/product-page/custom-collars","dt":"2026-10-14"},{"id":"0eb963d2-6d9a-41f9-b9d9-df6057cecc35","n":"Jessica Lynn HMS shirt","c":"Show Wear","p":300,"r":"New Arrival","s":"","m":"Jessica Lynn","k":"Excellent","t":"0171","d":"Jessica Lynn Horsemanship shirt black based scattered with beautiful stones all over. Bust 34” Waist 30” Shoulder 15.5” Hip 34” Arm 24” Located Salem OR","img":"f2cfaf_e063f763085b4bb1abe0656501a8ea96~mv2.jpg","ar":0.573,"u":"https://www.debistackboutique.com/product-page/jessica-lynn-hms-shirt","dt":"2026-10-14"},{"id":"4c19b794-bac4-4447-9b34-d8f5869cd806","n":"Tandy Jo SMS jacket","c":"Show Wear","p":1000,"r":"New Arrival","s":"","m":"Tandy Jo DYI","k":"New / unused","t":"0170","d":"Tandy Jo DYI SMS Jacket Bust 38” Shoulder: 17” Waist: 33” Arm: 28 Hip: 38” This beautiful jacket is just stunning and comes with extra stones. Brand new never used","img":"f2cfaf_ad0f8763b31d450fad8e28dd5efa78af~mv2.jpg","ar":0.75,"u":"https://www.debistackboutique.com/product-page/tandy-jo-sms-jacket","dt":"2026-10-14"},{"id":"7063bfd6-65ff-4ec8-bfd9-1b535fdbf79d","n":"Lindsey James HMS top","c":"Show Wear","p":900,"r":"New Arrival","s":"","m":"Lindsey James","k":"Excellent","t":"0169","d":"Lindsey James HMS top Shoulder: 16\" Bust: 33\" Waist: 25\" Length: 24\" Arm: 24\"","img":"f2cfaf_dca6af813da54112b2808165826979b3~mv2.jpg","ar":1.0,"u":"https://www.debistackboutique.com/product-page/lindsey-james-hms-top","dt":"2026-10-14"},{"id":"09b6ddc2-f2e1-4fb2-9a8d-1a7d8e75c500","n":"Billy Royal 16″ FQHB rough out work saddle","c":"Saddles","p":1500,"r":"New Arrival","s":"16″ seat","m":"Billy Royal","k":"Excellent","t":"0168","d":"","img":"f2cfaf_c95430b4401a4901b11f8baee3282ab9~mv2.jpg","ar":0.781,"u":"https://www.debistackboutique.com/product-page/billy-royal-16-fqhb-rough-out-work-saddle","dt":"2026-10-12"},{"id":"b1ba30b3-b6d9-400f-8113-fb4e81dc3883","n":"Pessoa 17″ seat English saddle","c":"English","p":850,"r":"New Arrival","s":"17″ seat","m":"Pessoa","k":"Good","t":"0167","d":"Pessoa 17” seat English saddle and comes with a carry bag","img":"f2cfaf_303561746485488e9516e5b51645f5dd~mv2.jpg","ar":1.083,"u":"https://www.debistackboutique.com/product-page/pessoa-17-seat-english-saddle","dt":"2026-10-12"},{"id":"1430dd6a-cfde-4902-87c9-88eb9f587b41","n":"Youth black chaps","c":"Boots & Chaps","p":125,"r":"New Arrival","s":"","m":"","k":"Excellent","t":"0166","d":"Youth leather chaps: Waist 24\" - 29\" Length 37\" Upper thigh 19\"- 20.5\" Inseam 26\" Nice hardware","img":"f2cfaf_316e99dc308b435f94e59e0d0ad13b2d~mv2.jpg","ar":0.662,"u":"https://www.debistackboutique.com/product-page/youth-black-chaps","dt":"2026-10-12"},{"id":"241168bc-7152-437b-b48c-84a2a786eb7e","n":"Circle Y Arabian bars 16″ saddle","c":"Saddles","p":1200,"r":"New Arrival","s":"16″ seat","m":"Circle Y","k":"Excellent","t":"0165","d":"Circle Y 16” Arabian bars and a 26” skirt. Excellent condition and super comfortable smooth leather seat. Buyer pays for shipping. Located in Salem OR","img":"f2cfaf_729d98668cdd434c9f7517fbe38c2136~mv2.jpg","ar":0.776,"u":"https://www.debistackboutique.com/product-page/circle-y-arabian-bars-16-saddle","dt":"2026-10-12"},{"id":"d8830d34-7b13-406e-a859-cc78e6d50613","n":"Harris mare sized Halter","c":"Tack","p":950,"r":"New Arrival","s":"Mare","m":"Harris","k":"Excellent","t":"0164","d":"Harris mare sized show halter and lead. Comes with anti-tarnish bag","img":"f2cfaf_7552b3d2c1b944208f46e35f0daa704b~mv2.jpg","ar":0.616,"u":"https://www.debistackboutique.com/product-page/harris-mare-sized-halter","dt":"2026-10-12"},{"id":"98e0ce8d-e384-4189-8ada-bb189ff840a6","n":"Double T 16″ works saddle FQHB","c":"Saddles","p":500,"r":"New Arrival","s":"16″ seat","m":"Double T","k":"Good","t":"0163","d":"","img":"f2cfaf_53af10e6a1b64e43af0ef755d098c332~mv2.jpg","ar":0.795,"u":"https://www.debistackboutique.com/product-page/double-t-16-works-saddle-fqhb","dt":"2026-10-12"},{"id":"7ec41d4f-25aa-4dee-a246-8fb117e2c794","n":"Harris headstall, correction bit and Billy Royal reins","c":"Tack","p":175,"r":"New Arrival","s":"Horse","m":"Harris","k":"Good","t":"0162","d":"","img":"f2cfaf_a10aec48a1c348f6a1796a844cbb1c40~mv2.jpg","ar":0.378,"u":"https://www.debistackboutique.com/product-page/harris-headstall-correction-bit-and-billy-royal-reins","dt":"2026-10-12"},{"id":"ff69b767-e32d-2142-3207-7c7207e48498","n":"Shorty’s","c":"Hats","p":1000,"r":"New Arrival","s":"6 3/4","m":"Shorty's","k":"Excellent","t":"0106","d":"Shorty’s 100x black 6 3/4 includes can. Used one time and in excellent condition","img":"f2cfaf_f61ce69d02a5462fbb9d145078bc74d4~mv2.png","ar":0.75,"u":"https://www.debistackboutique.com/product-page/shorty-s","dt":"2026-09-01"},{"id":"a8225aed-ac72-59b8-b954-464067972de6","n":"Greeley","c":"Hats","p":450,"r":"New Arrival","s":"6 7/8","m":"","k":"Excellent","t":"","d":"Greeley black hat 6 7/8 The Competitor, in excellent condition also comes with hat can","img":"f2cfaf_ac83c11fbe8f43abb2b8ed7472743493~mv2.png","ar":0.75,"u":"https://www.debistackboutique.com/product-page/greeley","dt":"2026-09-01"},{"id":"6266fbf2-3340-7571-6085-063793680819","n":"Serratelli","c":"Hats","p":200,"r":"New Arrival","s":"6 7/8","m":"","k":"","t":"","d":"Serratelli white 8x size 6 7/8 4” brim and angora blend","img":"f2cfaf_834c2f9895b54058a76778590540eb4f~mv2.png","ar":0.75,"u":"https://www.debistackboutique.com/product-page/serratelli","dt":"2026-09-01"},{"id":"b8821c44-7e6c-6739-d543-ee491d2b6ba2","n":"Cruel Girl","c":"Hats","p":50,"r":"New Arrival","s":"6 7/8","m":"","k":"","t":"","d":"Cruel Girl black 6 7/8 no band","img":"f2cfaf_c6b291b5a3a943c9a49723065dd84fb8~mv2.png","ar":0.75,"u":"https://www.debistackboutique.com/product-page/cruel-girl","dt":"2026-09-01"},{"id":"de19edac-de32-c5e7-c97c-28757d22ad4f","n":"Stetson","c":"Hats","p":100,"r":"New Arrival","s":"6 7/8","m":"","k":"","t":"","d":"Stetson 6 7/8 4x sand","img":"f2cfaf_92c8e947da9e480bb61932c8c64ffeb1~mv2.png","ar":0.75,"u":"https://www.debistackboutique.com/product-page/stetson-1","dt":"2026-09-01"},{"id":"23ca3ae0-a004-32c7-fc6c-2750400866c5","n":"Bailey","c":"Hats","p":125,"r":"New Arrival","s":"6 7/8","m":"","k":"","t":"","d":"Bailey white 6 7/8 and a 4x starting","img":"f2cfaf_2e09a7e84523427b85d41d5e298909d9~mv2.png","ar":0.75,"u":"https://www.debistackboutique.com/product-page/bailey","dt":"2026-09-01"},{"id":"c1c85220-ce64-7dbc-b10d-9ba4b56d4643","n":"Stetson","c":"Hats","p":125,"r":"New Arrival","s":"6 7/8","m":"","k":"","t":"","d":"Stetson black 6 7/8 standard oval 4x","img":"f2cfaf_e9fcae4ab8294e9fa650f0ddd039856c~mv2.jpg","ar":1.0,"u":"https://www.debistackboutique.com/product-page/stetson","dt":"2026-08-31"},{"id":"fe090bd2-b892-cd7c-4891-5c92b20a0dcd","n":"Mylers","c":"Spurs","p":75,"r":"","s":"","m":"","k":"","t":"","d":"Mylers 2”","img":"f2cfaf_44b78061393b4a2ea4bd39bbf503ab56~mv2.jpeg","ar":2.558,"u":"https://www.debistackboutique.com/product-page/mylers-1","dt":"2026-06-27"},{"id":"98319cce-65f8-51c5-cf36-14c211e86c76","n":"Western Spurs","c":"Spurs","p":45,"r":"","s":"","m":"","k":"","t":"","d":"2.5” neck","img":"f2cfaf_cdfbf2c5bce548fc8103d97971350339~mv2.jpeg","ar":2.222,"u":"https://www.debistackboutique.com/product-page/western-spurs-2","dt":"2026-06-27"},{"id":"744d1b28-f40b-ad1a-1204-65c50c4aa7fa","n":"Colorado Company","c":"Spurs","p":85,"r":"","s":"","m":"","k":"","t":"","d":"Colorado Company 2.5”","img":"f2cfaf_a8d6d434af484be4b5c3c226c737dbd2~mv2.jpeg","ar":3.079,"u":"https://www.debistackboutique.com/product-page/colorado-company","dt":"2026-06-27"},{"id":"1bfb1e63-3d4b-bd9c-a585-95eb028adc04","n":"Mylers","c":"Spurs","p":85,"r":"","s":"","m":"","k":"","t":"","d":"Mylers 2” changeable rowel","img":"f2cfaf_39c108c086e946ee9f023353d6a69631~mv2.jpeg","ar":1.903,"u":"https://www.debistackboutique.com/product-page/mylers","dt":"2026-06-27"},{"id":"64d72a80-54ac-eae6-4b88-a8e227656166","n":"Western Spurs","c":"Spurs","p":35,"r":"","s":"","m":"","k":"","t":"","d":"1.5” ball spurs","img":"f2cfaf_5c1f48f64c4e49afb1c4135dea68e75e~mv2.jpeg","ar":1.62,"u":"https://www.debistackboutique.com/product-page/western-spurs-1","dt":"2026-06-27"},{"id":"9477c6bd-2bb0-2855-ee4e-4e1aa6536469","n":"Dale Chavez","c":"Spurs","p":125,"r":"","s":"","m":"","k":"","t":"","d":"Dale Chavez 2.5” spurs","img":"f2cfaf_76276fba7d654e899c80d7d97a22d918~mv2.jpeg","ar":2.339,"u":"https://www.debistackboutique.com/product-page/dale-chavez","dt":"2026-06-27"},{"id":"2bd5ce6b-ebd3-84fc-b9ff-39f40a23f4e8","n":"Western Spurs","c":"Spurs","p":75,"r":"","s":"","m":"","k":"","t":"","d":"Purple/blue Swarovski 2.5”","img":"f2cfaf_46016332a377422d815b31a80cbfa884~mv2.jpeg","ar":1.299,"u":"https://www.debistackboutique.com/product-page/western-spurs","dt":"2026-06-27"},{"id":"62d83b57-2344-720b-5476-2fceafbe94a2","n":"Collegiate","c":"English","p":700,"r":"","s":"17″ seat","m":"","k":"","t":"","d":"17” Collegiate English jump saddle","img":"f2cfaf_a250c775fb34417d97cfa07cd1f0b5e5~mv2.jpeg","ar":1.07,"u":"https://www.debistackboutique.com/product-page/collegiate","dt":"2026-06-27"},{"id":"d66b86fd-9db3-3b53-8c5e-7cc4c8bd88c3","n":"Shoofly Leggins","c":"Tack","p":45,"r":"","s":"M","m":"","k":"","t":"","d":"Fly boots size M","img":"f2cfaf_629f534dd3214230b7ae386a7be84f0b~mv2.jpeg","ar":0.75,"u":"https://www.debistackboutique.com/product-page/shoofly-leggins","dt":"2026-06-27"},{"id":"60408d5c-d11f-c60c-b824-dd20f327f347","n":"Triple S Western wear","c":"Show Wear","p":575,"r":"","s":"","m":"","k":"","t":"","d":"Triple S Western wear ☠️ Skull vest and shirt, oversized matching pad VEST: Shoulders 14.5” Bust 40” Waist 37” Hips 38” SHIRT: has lots of stretch Shoulders: 15” Bust 42” Vest, shirt, and oversized pad","img":"f2cfaf_a07c35c047f04bff800d49f26a0e64ba~mv2.jpg","ar":1.053,"u":"https://www.debistackboutique.com/product-page/triple-s-western-wear","dt":"2026-06-27"},{"id":"9b3f1a01-04b1-4ab3-57ef-6db0d54e156a","n":"White Diane Olsen jacket","c":"Show Wear","p":250,"r":"","s":"","m":"","k":"","t":"","d":"White Diane Olsen jacket, showmanship or riding: Shoulder 13” Length 22” Bust 31” Waist 28” Hips 31” Arm 23.5”. Located SALEM OR","img":"f2cfaf_b39e6a05c0de4a3fbd156980b92973da~mv2.jpg","ar":1.0,"u":"https://www.debistackboutique.com/product-page/white-diane-olsen-jacket","dt":"2026-06-25"},{"id":"20b8a686-7336-6777-6a40-5c68d0d7f4dd","n":"Youth Shirt","c":"Show Wear","p":200,"r":"","s":"","m":"","k":"","t":"","d":"Brown youth horsemanship shirt laying flat: shoulder 13” Bust 27” Length 21” Waist 25 minimal stretch Arm 22”. Motivated seller. Located Salem OR","img":"f2cfaf_ae3d5a14c4a14396a47d676626bc82cd~mv2.jpg","ar":1.0,"u":"https://www.debistackboutique.com/product-page/youth-shirt","dt":"2026-06-25"},{"id":"18847604-277a-545b-d23d-255f16ea2a91","n":"Smoke Show","c":"Show Wear","p":100,"r":"","s":"","m":"","k":"","t":"","d":"Smoke Show: this gorgeous gun metal gray has some stretch and has a zip up front and snaps. Measurements: Shoulders: 16” Bust: 42” Length: 25” Arm 24”","img":"f2cfaf_23a622ce80bc48739e1108e749c22e14~mv2.jpeg","ar":0.684,"u":"https://www.debistackboutique.com/product-page/smoke-show","dt":"2026-06-25"},{"id":"5b156ae7-0b7a-24e3-02bd-d7eb6accbdd9","n":"Bob's Custom","c":"Saddles","p":4200,"r":"","s":"17″ seat","m":"","k":"Excellent","t":"","d":"Bob’s Custom show saddle excellent condition for a 2007. It has a DL tree that is 8 1/4’’ tall in the front end and 6 1/2’’ wide for the gullet width. It has a 17 1/2’’ tree with a double padded DL seat, which is a mid rising seat that finishes out at 17’’ for the seat. It has a silver horn with a 3’’ cantle and 17 1/2’’ fenders, which is the standard length. Owner is a motivated seller located in Salem OR","img":"f2cfaf_16f1ad3013714281825e4c1871327ca1~mv2.jpeg","ar":0.75,"u":"https://www.debistackboutique.com/product-page/bob-s-custom","dt":"2026-06-25"},{"id":"e26e4be0-040b-206d-855f-4e73650dbbc8","n":"Circle Y","c":"Saddles","p":1200,"r":"","s":"16″ seat","m":"","k":"","t":"","d":"Circle Y 16” saddle with Equitation seat with a regular tree","img":"f2cfaf_eefdf23dcf7e40d4a081317e620a9969~mv2.jpeg","ar":0.88,"u":"https://www.debistackboutique.com/product-page/circle-y","dt":"2026-06-25"},{"id":"a5cdc732-a088-ae90-4734-7bd59ef4bb21","n":"Black Horse Saddlery","c":"Saddles","p":3600,"r":"","s":"16″ seat","m":"","k":"New","t":"","d":"16” Black Horse Saddlery custom all around rough out saddle. FQHB and just only put on horse so brand new condition. Motivated seller","img":"f2cfaf_1046778d207c4215add502e89362987a~mv2.jpg","ar":1.208,"u":"https://www.debistackboutique.com/product-page/black-horse-saddlery","dt":"2026-06-25"},{"id":"7102533b-b3b0-4964-6fea-c8c997df0ca0","n":"Blue Ribbon","c":"Saddles","p":3250,"r":"","s":"15.5″ seat","m":"","k":"","t":"","d":"Beautiful Blue Ribbon saddle built on a BR 16” tree padded to 15.5 seat. Loaded with silver and just as comfortable as can be. Always stores indoors when not in use. Located in OR","img":"f2cfaf_660cd4190e874a329713b26c322450f5~mv2.jpeg","ar":0.886,"u":"https://www.debistackboutique.com/product-page/blue-ribbon","dt":"2026-06-25"},{"id":"dab2981f-5fbc-e2ad-0992-935e6b343a0d","n":"Western Saddle","c":"Saddles","p":800,"r":"","s":"16″ seat","m":"","k":"","t":"","d":"Showman 16” FQHB comes with bag and motivated seller","img":"f2cfaf_6acd98a766a14b88a63a965f9ad83683~mv2.jpeg","ar":0.898,"u":"https://www.debistackboutique.com/product-page/western-saddle-2","dt":"2026-01-10"},{"id":"a2434f68-90c8-538c-893d-2f5eda9f899d","n":"Ariat","c":"Boots & Chaps","p":100,"r":"","s":"7.5","m":"","k":"Lightly used","t":"","d":"7.5 full calf Minimal use","img":"f2cfaf_42a6ae08179b48d4b1736f43381f69f2~mv2.jpeg","ar":1.0,"u":"https://www.debistackboutique.com/product-page/ariat-1","dt":"2025-11-30"},{"id":"73d11418-aba6-380d-c3aa-8eb3fdaef4c4","n":"Used Boots","c":"Boots & Chaps","p":75,"r":"","s":"9.5","m":"","k":"","t":"","d":"Used but life left 9.5 leather field boots pull on","img":"f2cfaf_3656a0fd4b82400fbec57bf5afbf5663~mv2.jpeg","ar":1.0,"u":"https://www.debistackboutique.com/product-page/used-boots","dt":"2025-11-30"},{"id":"13a4d82f-6c85-7afe-27c9-1dd7c1a20359","n":"DiNero","c":"Boots & Chaps","p":400,"r":"","s":"39 (US 8.5)","m":"","k":"Like new","t":"","d":"DiNero Italian leather field boots size 39 or 8.5 only worn twice. Excellent condition. Comes with boot bag","img":"f2cfaf_74282825a34849cbaee078da1146811d~mv2.jpeg","ar":0.75,"u":"https://www.debistackboutique.com/product-page/dinero","dt":"2025-11-30"},{"id":"9c6412e0-ab17-5e9c-64bf-2107faf752f2","n":"Shoulder Guard","c":"Tack","p":25,"r":"","s":"XL","m":"","k":"","t":"","d":"XL Shoulder Guard","img":"f2cfaf_1817ba997d3f4907a14dae8aa7376ec0~mv2.jpg","ar":1.15,"u":"https://www.debistackboutique.com/product-page/shoulder-guard","dt":"2025-09-04"},{"id":"95441055-5008-dafc-4348-2fe8c2c41441","n":"Smokey Mountain","c":"Boots & Chaps","p":45,"r":"","s":"7.5","m":"","k":"","t":"","d":"Smokey mountain 7.5","img":"f2cfaf_c86316d8ef994c6bb826b5252565bc1f~mv2.jpeg","ar":1.0,"u":"https://www.debistackboutique.com/product-page/smokey-mountain","dt":"2025-09-01"},{"id":"7a8da8e1-e6c8-804c-5b74-d6969f5f27fc","n":"Big D","c":"Blankets","p":35,"r":"","s":"","m":"","k":"","t":"","d":"Green wool cooler","img":"f2cfaf_4fd1f0384f39499aae30edd63c2cbec6~mv2.jpeg","ar":0.961,"u":"https://www.debistackboutique.com/product-page/big-d-4","dt":"2025-09-01"},{"id":"8f04dd23-6232-6791-5c31-d6dffd8647bf","n":"Big D","c":"Blankets","p":30,"r":"","s":"80","m":"","k":"","t":"","d":"Black Big D sheet size 80 has some gray piping missing and no front strap","img":"f2cfaf_a016d0bcda9d48748488d33712d33a6e~mv2.jpeg","ar":1.016,"u":"https://www.debistackboutique.com/product-page/big-d-3","dt":"2025-09-01"},{"id":"dd6031ca-9d85-fe1f-7cd2-25834f9be754","n":"Big D","c":"Blankets","p":45,"r":"","s":"80","m":"","k":"","t":"","d":"Big D navy size 80 embroidered light winter blanket","img":"f2cfaf_2af3d61f863041feb2ede6667a70968c~mv2.jpeg","ar":1.788,"u":"https://www.debistackboutique.com/product-page/big-d-2","dt":"2025-09-01"},{"id":"f57562fd-b027-5dc8-6099-86a7d7b0efe7","n":"Big D","c":"Blankets","p":45,"r":"","s":"80","m":"","k":"","t":"","d":"Big D size 80 black body liner with belly strap","img":"f2cfaf_e54ba21cc2c34d3fbf72f5d442c755c3~mv2.jpeg","ar":0.661,"u":"https://www.debistackboutique.com/product-page/big-d-1","dt":"2025-09-01"},{"id":"4630aa0c-1b0a-e065-53e6-5e13dc36c304","n":"Big D","c":"Blankets","p":75,"r":"","s":"80","m":"","k":"Great","t":"","d":"Black size 80 full body & neck cover and a belly strap. Great for the hurry up wait to keep warm & clean or between the halter or showmanship classes. Washed & ready to move","img":"f2cfaf_c86e226ba28a4e19afac839ef09fc16d~mv2.jpeg","ar":1.06,"u":"https://www.debistackboutique.com/product-page/big-d","dt":"2025-09-01"},{"id":"e52ec4f9-a63b-30e2-3b0a-2dcefccc0f6b","n":"Showmanship Jacket","c":"Show Wear","p":250,"r":"","s":"","m":"","k":"","t":"","d":"Beautiful showmanship jacket covered in stones just stunning. 22.5\" bottom of collar to bottom 16\" shoulder 28\" bust Open to offers","img":"f2cfaf_c4e3425f42a74327823d346974b76efc~mv2.jpeg","ar":0.75,"u":"https://www.debistackboutique.com/product-page/showmanship-jacket","dt":"2025-08-20"},{"id":"6409dc67-8b5a-bff0-4fae-7eddb4bb29f8","n":"Western Showmanship Jacket","c":"Show Wear","p":45,"r":"","s":"","m":"","k":"","t":"","d":"Winning Collection Teal animal print Shoulder Size 14 3/4\" Bust 32\" Arm 22 1/2\" Waist 26\" Hips 38\"","img":"f2cfaf_ecc7f1e374384706ae67cf40c9e6b4ad~mv2.jpeg","ar":0.75,"u":"https://www.debistackboutique.com/product-page/western-show-shirt-15","dt":"2025-08-19"},{"id":"68ec9a72-7274-a0bd-2b49-5ff71222b5ae","n":"Western Show Shirt","c":"Show Wear","p":50,"r":"","s":"","m":"","k":"","t":"","d":"The vest is puple and gold. Lenth is 8\" Bust is 34\" Arm hole length is 8\" Size would be XS The price is open to offers","img":"f2cfaf_4f2a828360e34429ba1acfb6b0bc1c43~mv2.jpeg","ar":0.75,"u":"https://www.debistackboutique.com/product-page/western-show-shirt-14","dt":"2025-08-19"},{"id":"98c26ef7-a62b-399a-e312-518a938ae993","n":"Western Show Shirt","c":"Show Wear","p":25,"r":"","s":"","m":"","k":"","t":"","d":"Western ranch shirt thats green and gold Shoulder 15\" Bust 38\" Arm 24\"","img":"f2cfaf_44bbc9a83edf4f7ab2651cd5d0bd1bb1~mv2.jpeg","ar":0.75,"u":"https://www.debistackboutique.com/product-page/western-show-shirt-13","dt":"2025-08-19"},{"id":"d7c9e6f7-3e4d-a66c-9c59-9102b0ded024","n":"Western Show Shirt","c":"Show Wear","p":125,"r":"","s":"","m":"","k":"","t":"","d":"Fusia Horsemanship shirt with crystal collar thats stretch spandex. Size is small Shoulder 14\" Bust 31\" Arm 22\"","img":"f2cfaf_96817c3cc71c4232b604478f4deae534~mv2.jpeg","ar":0.75,"u":"https://www.debistackboutique.com/product-page/western-show-shirt-11","dt":"2025-08-19"},{"id":"96d52ea5-520d-6a0e-57fd-6b0563d4c7e7","n":"Western Show Shirt","c":"Show Wear","p":25,"r":"","s":"XS","m":"","k":"","t":"","d":"Hippie Rose Size XS Pattern Horse shoe Material Rayon","img":"f2cfaf_f631f16fd2774d4c952f778c07a12cfa~mv2.jpeg","ar":0.75,"u":"https://www.debistackboutique.com/product-page/western-show-shirt-10","dt":"2025-08-19"},{"id":"55209caf-1039-82cb-edee-bba2807df6b0","n":"Western Show Jacket","c":"Show Wear","p":35,"r":"","s":"XL","m":"","k":"","t":"","d":"Black, white and gold womans stretch jacket Size XL Shoulder 20\" Bust 47\" Waist 40\"","img":"f2cfaf_d823a08fb07a46d0899efe9f36ecbbd5~mv2.jpeg","ar":0.75,"u":"https://www.debistackboutique.com/product-page/western-show-shirt-7","dt":"2025-08-19"},{"id":"910f5f14-f72c-696d-355c-4691ed48cc95","n":"Western Show Shirt","c":"Show Wear","p":35,"r":"","s":"","m":"","k":"","t":"","d":"Red, Pink and black jacket/shirt zip up. Shoulder 17\" Bust 34\" Arm 25\" w/cuff Waist 28\"","img":"f2cfaf_1b5e62368bdd457f84ff13f87691ec48~mv2.jpeg","ar":0.75,"u":"https://www.debistackboutique.com/product-page/western-show-shirt-5","dt":"2025-08-19"},{"id":"5267a496-39a6-6f0f-feaf-c8bd3464e5ae","n":"Western Show Jacket","c":"Show Wear","p":35,"r":"","s":"","m":"","k":"","t":"","d":"Red, white and black zip up and stretch. Shoulder 17\" Bust 40\" Arm 24 1/2\" Hips 40\"","img":"f2cfaf_17fca20dd83248a5bfa590885d3010b5~mv2.jpeg","ar":0.75,"u":"https://www.debistackboutique.com/product-page/western-show-shirt-4","dt":"2025-08-19"},{"id":"595ef458-20f0-f397-fb4a-5837125f4364","n":"Western Show Youth Set","c":"Show Wear","p":50,"r":"","s":"","m":"","k":"","t":"","d":"Shirt is burgundy and tan. (missing jewels) Size 11\" Bust 12\" Arm 16\" Tan chaps: Needs buckel holes and fix the back. (No concho) Inside zipper 19\" Outside zipper 28 1/2\" Length top to bottom 31\" Waist 11 1/2\" with buckel 5\" Thigh 14\" Knee 11\"","img":"f2cfaf_9f0ee3efc3a7444d973bf2bb6577dca3~mv2.jpeg","ar":0.75,"u":"https://www.debistackboutique.com/product-page/western-show-youth-set","dt":"2025-08-19"},{"id":"34fdded1-26e4-c84f-4ff2-9cc5aa381c80","n":"Western Show Shirt","c":"Show Wear","p":40,"r":"","s":"","m":"","k":"","t":"","d":"Green shirt with crystals and floral pattern Bust 32\" Waist 30\" Lenth 20 1/2\"","img":"f2cfaf_4998969087f34835ac73067b9c31d626~mv2.jpeg","ar":0.75,"u":"https://www.debistackboutique.com/product-page/western-show-shirt-3","dt":"2025-08-19"},{"id":"6fe9ff03-d5c7-f465-d83f-32010570eaad","n":"Western Show Shirt","c":"Show Wear","p":125,"r":"","s":"","m":"","k":"","t":"","d":"Red and black retro shirt with stones and pearls on the collar. Shirt is lined with spandex. Shoulder 16\", Waist 37\", Hips 46\", Arm 24\", Bust 38\". Missing stone","img":"f2cfaf_fa86b04c65ee4edca3657005a6ba37dd~mv2.jpeg","ar":0.771,"u":"https://www.debistackboutique.com/product-page/western-show-shirt-1","dt":"2025-08-19"},{"id":"2535aff1-1bfa-2866-4a3c-cd26a201d6b9","n":"Crates Cutting Saddle","c":"Saddles","p":950,"r":"","s":"16″ seat","m":"","k":"Great","t":"","d":"Crates cutting saddle with a 16\" seat. The saddle is in great condition and comes with 2 back cinches","img":"f2cfaf_2a692b6260df4643b4ff82ebd14a5f5a~mv2.png","ar":0.807,"u":"https://www.debistackboutique.com/product-page/crates-cutting-saddle","dt":"2025-07-30"},{"id":"4e6a220a-4930-7ca4-2055-c1b42e57634f","n":"Western Show Pad","c":"Tack","p":85,"r":"","s":"","m":"","k":"","t":"","d":"Cream, purple, gray and teal 33x38\"","img":"f2cfaf_b832d8a1389a4ffcaebcff02b06be632~mv2.jpeg","ar":1.62,"u":"https://www.debistackboutique.com/product-page/western-show-pad-2","dt":"2025-07-28"},{"id":"122fbcd7-a039-0c66-8140-96b48b97367b","n":"Western Show Pad","c":"Tack","p":85,"r":"Show pad","s":"","m":"","k":"","t":"","d":"Black & red 35\"x35.5\"","img":"f2cfaf_b80da95af3a44561a70d7a879eec2164~mv2.jpeg","ar":1.635,"u":"https://www.debistackboutique.com/product-page/western-show-pad","dt":"2025-07-28"}];
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money=n=>"$"+Number(n).toLocaleString("en-US");
+const img=id=>{const i=INV.find(x=>x.id===id);return i&&i.img?`https://static.wixstatic.com/media/${i.img}/v1/fill/w_640,h_640,al_c,q_80/file.jpg`:""};
+const GLYPH='<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 27V15a7 7 0 0 1 14 0v12"/><path d="M6 27h6M20 27h6"/></svg>';
+const CATS=["All","Saddles","English","Show Wear","Hats","Boots & Chaps","Spurs","Tack","Blankets"];
+let fCat="All",fQ="",fSort="new",shown=12;
+document.getElementById("inv-count").textContent=INV.length;
+const chips=document.getElementById("inv-chips");
+chips.innerHTML=CATS.map(c=>{const n=c==="All"?INV.length:INV.filter(i=>i.c===c).length;return n?`<button class="chip" type="button" data-c="${esc(c)}" aria-pressed="${c===fCat}">${esc(c)}<small>${n}</small></button>`:""}).join("");
+chips.addEventListener("click",e=>{const b=e.target.closest(".chip");if(!b)return;fCat=b.dataset.c;shown=12;chips.querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed",x===b));renderInv()});
+document.getElementById("inv-q").addEventListener("input",e=>{fQ=e.target.value.trim().toLowerCase();shown=12;renderInv()});
+document.getElementById("inv-sort").addEventListener("change",e=>{fSort=e.target.value;renderInv()});
+document.getElementById("inv-more").addEventListener("click",()=>{shown+=12;renderInv()});
+function list(){
+  let a=INV.filter(i=>(fCat==="All"||i.c===fCat)&&(!fQ||(i.n+" "+i.m+" "+i.s+" "+i.d+" "+i.c+" tag "+i.t).toLowerCase().includes(fQ)));
+  if(fSort==="lo")a=a.slice().sort((x,y)=>x.p-y.p);else if(fSort==="hi")a=a.slice().sort((x,y)=>y.p-x.p);else a=a.slice().sort((x,y)=>y.dt.localeCompare(x.dt));
+  return a;
+}
+function meta(i){return [i.s,i.k].filter(Boolean).join(" · ")}
+function renderInv(){
+  const a=list(),g=document.getElementById("inv-grid");
+  g.innerHTML=a.slice(0,shown).map(i=>`<button class="item" type="button" data-id="${i.id}">
+    <span class="ph"><img src="${img(i.id)}" alt="${esc(i.n)}" loading="lazy" decoding="async" onerror="this.parentNode.classList.add('noimg')"><span class="glyph">${GLYPH}</span>${i.r?`<span class="rib">${esc(i.r)}</span>`:""}${i.t?`<span class="tagno">#${esc(i.t)}</span>`:""}</span>
+    <span class="info"><span class="ct">${esc(i.c)}</span><b>${esc(i.n)}</b><span class="meta">${esc(meta(i))}</span><span class="pr">${money(i.p)}</span></span></button>`).join("");
+  document.getElementById("inv-empty").hidden=a.length>0;
+  document.getElementById("inv-more").hidden=a.length<=shown;
+  if(!reduce&&matchMedia("(hover:hover)").matches) g.querySelectorAll(".item").forEach(tilt);
+}
+function tilt(c){
+  c.addEventListener("pointermove",e=>{const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;c.style.transform=`rotateY(${(x-.5)*10}deg) rotateX(${(.5-y)*8}deg) translateZ(6px)`});
+  c.addEventListener("pointerleave",()=>{c.style.transform=""});
+}
+renderInv();
+
+/* Item detail */
+const dlg=document.getElementById("item-dlg");
+let cur=null;
+document.getElementById("inv-grid").addEventListener("click",e=>{const b=e.target.closest(".item");if(!b)return;openItem(INV.find(i=>i.id===b.dataset.id))});
+function openItem(i){
+  cur=i;
+  const im=document.getElementById("dlg-img");
+  im.innerHTML=`<img src="${img(i.id)}" alt="${esc(i.n)}" onerror="this.remove()"><span class="glyph">${GLYPH}</span>`;
+  document.getElementById("dlg-cat").textContent=i.c+(i.r?" · "+i.r:"");
+  document.getElementById("dlg-title").textContent=i.n;
+  document.getElementById("dlg-price").textContent=money(i.p);
+  const f=[["Size",i.s],["Maker",i.m],["Condition",i.k],["Tag",i.t?"#"+i.t:""]].filter(x=>x[1]);
+  document.getElementById("dlg-facts").innerHTML=f.map(x=>`<dt>${x[0]}</dt><dd>${esc(x[1])}</dd>`).join("");
+  document.getElementById("dlg-desc").textContent=i.d;
+  document.getElementById("dlg-buy").href=i.u;
+  if(dlg.showModal)dlg.showModal();else dlg.setAttribute("open","");
+}
+function closeDlg(){if(dlg.close)dlg.close();else dlg.removeAttribute("open")}
+document.getElementById("dlg-x").addEventListener("click",closeDlg);
+dlg.addEventListener("click",e=>{if(e.target===dlg)closeDlg()});
+document.getElementById("dlg-ask").addEventListener("click",()=>{
+  if(!cur)return;closeDlg();setType("Shopping question");
+  detail.value=`${cur.n}${cur.t?" (Tag #"+cur.t+")":""}, ${money(cur.p)}`;
+});
+
+/* Marquee: real brands in the boutique */
+const BR=["Circle Y","Billy Royal","Harris","Pessoa","Stetson","Greeley","Blue Ribbon","Black Horse Saddlery","Bob's Custom","Crates","Dale Chavez","Lindsey James","Jessica Lynn","Custom Collars","Tandy Jo","Big D","Shorty's","Serratelli"];
+const words=BR.map(x=>`<span>${esc(x)}</span>`).join("");
+document.getElementById("track").innerHTML=words+words;
+
+/* Nav border on scroll */
+const nav=document.getElementById("nav");
+addEventListener("scroll",()=>nav.classList.toggle("scrolled",scrollY>10),{passive:true});
+
+/* Reveal: only stage elements that start below the fold */
+if(!reduce && "IntersectionObserver" in window){
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.remove("stage-in");io.unobserve(e.target)}}),{threshold:.12});
+  document.querySelectorAll(".rv").forEach((el,i)=>{
+    if(el.getBoundingClientRect().top>innerHeight){el.classList.add("stage-in");el.style.transitionDelay=(el.classList.contains("card")?(i%4)*90:0)+"ms";io.observe(el)}
+  });
+}
+
+/* 3D tilt cards */
+if(!reduce && matchMedia("(hover:hover)").matches){
+  document.querySelectorAll(".card").forEach(c=>{
+    c.addEventListener("pointermove",e=>{
+      const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;
+      c.style.transform=`rotateY(${(x-.5)*14}deg) rotateX(${(.5-y)*12}deg) translateZ(10px)`;
+      c.style.setProperty("--mx",x*100+"%");c.style.setProperty("--my",y*100+"%");
+    });
+    c.addEventListener("pointerleave",()=>{c.style.transform=""});
+  });
+}
+
+/* Prefill request type from CTAs */
+const detailLabel=document.getElementById("detail-label"),detail=document.getElementById("f-detail");
+const HINTS={"Consignment":["Item and size",'e.g. 15" Circle Y trail saddle, medium tree'],"Tack cleaning":["What are you bringing?","e.g. Western saddle and two headstalls, show on the 12th"],"Buying a horse":["What are you looking for?","e.g. Trail horse, 14.3–15.2 hh, beginner safe, budget $"],"Selling a horse":["Tell us about your horse","e.g. 9 yr QH gelding, 15 hh, ranch riding, asking $"],"Shopping question":["What are you looking for?","e.g. Size 8 boots, 16\" show saddle"]};
+function setType(v){const r=[...document.querySelectorAll('input[name="Request"]')].find(i=>i.value===v);if(r){r.checked=true;applyHint(v)}}
+function applyHint(v){const h=HINTS[v];if(h){detailLabel.textContent=h[0];detail.placeholder=h[1]}}
+document.querySelectorAll('input[name="Request"]').forEach(r=>r.addEventListener("change",()=>applyHint(r.value)));
+document.querySelectorAll("[data-type]").forEach(a=>a.addEventListener("click",()=>setType(a.dataset.type)));
+
+/* Copy helpers */
+function selectNode(n){const r=document.createRange();r.selectNodeContents(n);const s=getSelection();s.removeAllRanges();s.addRange(r)}
+function copy(text,btn,node){
+  const ok=()=>{const o=btn.textContent;btn.textContent="Copied";setTimeout(()=>btn.textContent=o,1600)};
+  const fail=()=>{if(node){selectNode(node);btn.textContent="Selected, press copy"}};
+  try{navigator.clipboard.writeText(text).then(ok,fail)}catch(e){fail()}
+}
+document.querySelectorAll(".copy[data-c]").forEach(b=>b.addEventListener("click",()=>copy(b.dataset.c,b,b.previousElementSibling)));
+
+/* Form */
+document.getElementById("form").addEventListener("submit",e=>{
+  e.preventDefault();
+  const f=e.target,out=document.getElementById("out");
+  const missing=[...f.querySelectorAll("[required]")].filter(i=>!i.value.trim());
+  if(missing.length){out.innerHTML=`<p class="err">Please add your ${missing.map(m=>m.name.toLowerCase()).join(" and ")}.</p>`;missing[0].focus();return}
+  const lines=[];for(const [k,v] of new FormData(f).entries()) if(String(v).trim()) lines.push(k+": "+v);
+  const text="Debi's Tack Boutique request\n"+lines.join("\n");
+  out.innerHTML=`<div class="receipt"><b>Your request is ready to send.</b><p class="muted" style="font-size:.92rem">Copy it, then text 971-388-2020 or email debistackboutique@gmail.com and we'll reply soon.</p><pre></pre><button type="button" class="copy">Copy request</button></div>`;
+  const pre=out.querySelector("pre");pre.textContent=text;
+  out.querySelector(".copy").addEventListener("click",ev=>copy(text,ev.currentTarget,pre));
+});
+
+/* 3D logo medallion */
+(function(){
+  const stage=document.getElementById("stage"),canvas=document.getElementById("gl");
+  if(!window.THREE) return;
+  let renderer;
+  try{renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});}catch(e){return}
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  renderer.outputEncoding=THREE.sRGBEncoding;
+  renderer.toneMapping=THREE.ACESFilmicToneMapping;
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(35,1,.1,100);camera.position.set(0,0,7.2);
+
+  /* Logo medallion: badge on both faces, brass rim */
+  const R=1.72,D=.2;
+  const group=new THREE.Group();scene.add(group);
+  const tl=new THREE.TextureLoader();tl.setCrossOrigin("anonymous");const tex=tl.load("https://static.wixstatic.com/media/f2cfaf_7ecd5e333f904629a581b834188fab90~mv2.jpeg/v1/crop/x_710,y_100,w_1400,h_1400/fill/w_1024,h_1024,al_c,q_88/logo.jpg",()=>stage.classList.add("ready"));
+  tex.encoding=THREE.sRGBEncoding;tex.anisotropy=renderer.capabilities.getMaxAnisotropy();
+  const faceMat=new THREE.MeshStandardMaterial({map:tex,color:0xF4E9D6,roughness:.62,metalness:0,envMapIntensity:.3});
+  const faceGeo=new THREE.CircleGeometry(R*.93,128);
+  const front=new THREE.Mesh(faceGeo,faceMat);front.position.z=D/2+.001;group.add(front);
+  const back=new THREE.Mesh(faceGeo,faceMat);back.position.z=-D/2-.001;back.rotation.y=Math.PI;group.add(back);
+  const brass=new THREE.MeshStandardMaterial({color:0xC9A15B,metalness:1,roughness:.26});
+  const edge=new THREE.Mesh(new THREE.CylinderGeometry(R,R,D,128,1,true),brass);edge.rotation.x=Math.PI/2;group.add(edge);
+  const ringF=new THREE.Mesh(new THREE.TorusGeometry(R*.965,R*.05,24,160),brass);ringF.position.z=D/2;group.add(ringF);
+  const ringB=ringF.clone();ringB.position.z=-D/2;group.add(ringB);
+  const lip=new THREE.Mesh(new THREE.RingGeometry(R*.93,R*.95,128),brass);lip.position.z=D/2+.002;group.add(lip);
+  const lipB=lip.clone();lipB.position.z=-D/2-.002;lipB.rotation.y=Math.PI;group.add(lipB);
+
+  const key=new THREE.DirectionalLight(0xfff0d8,2.2);key.position.set(3,4,5);scene.add(key);
+  const rim=new THREE.DirectionalLight(0x9fc9ff,1.1);rim.position.set(-4,-1,-3);scene.add(rim);
+  scene.add(new THREE.AmbientLight(0xffffff,.25));
+
+  /* Golden dust */
+  const N=reduce?0:260,pos=new Float32Array(N*3),spd=new Float32Array(N);
+  for(let i=0;i<N;i++){pos[i*3]=(Math.random()-.5)*7;pos[i*3+1]=(Math.random()-.5)*7;pos[i*3+2]=(Math.random()-.5)*4-0.5;spd[i]=.002+Math.random()*.006}
+  const pg=new THREE.BufferGeometry();pg.setAttribute("position",new THREE.BufferAttribute(pos,3));
+  const dc=document.createElement("canvas");dc.width=dc.height=32;const d=dc.getContext("2d");
+  const rg=d.createRadialGradient(16,16,0,16,16,16);rg.addColorStop(0,"rgba(255,225,160,1)");rg.addColorStop(1,"rgba(255,225,160,0)");d.fillStyle=rg;d.fillRect(0,0,32,32);
+  const dust=new THREE.Points(pg,new THREE.PointsMaterial({size:.06,map:new THREE.CanvasTexture(dc),transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,opacity:.8}));
+  scene.add(dust);
+
+  /* Sizing */
+  function size(){const r=stage.getBoundingClientRect();const w=Math.max(1,r.width),h=Math.max(1,r.height);renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()}
+  size();addEventListener("resize",size);
+
+  /* Interaction: pointer tilt, drag to spin, scroll turns */
+  let tx=0,ty=0,cx=0,cy=0,spin=0,vel=reduce?0:.012,drag=false,lx=0;
+  addEventListener("pointermove",e=>{tx=(e.clientX/innerWidth-.5);ty=(e.clientY/innerHeight-.5);if(drag){vel=(e.clientX-lx)*.004;spin+=vel;lx=e.clientX}},{passive:true});
+  canvas.addEventListener("pointerdown",e=>{drag=true;lx=e.clientX;canvas.setPointerCapture(e.pointerId)});
+  canvas.addEventListener("pointerup",()=>{drag=false});
+  canvas.addEventListener("pointercancel",()=>{drag=false});
+
+  let visible=true;
+  new IntersectionObserver(es=>{visible=es[0].isIntersecting;if(visible)loop()}).observe(stage);
+  const clock=new THREE.Clock();let running=false;
+  function loop(){
+    if(running) return;running=true;
+    (function frame(){
+      if(!visible){running=false;return}
+      const t=clock.getElapsedTime();
+      cx+=(tx-cx)*.05;cy+=(ty-cy)*.05;
+      if(!drag){vel+=((reduce?0:.012)-vel)*.02;spin+=vel}
+      const sc=Math.min(scrollY/600,1);
+      group.rotation.y=spin+cx*.6+sc*1.5;
+      group.rotation.x=cy*.4+(reduce?0:Math.sin(t*.8)*.05);
+      group.position.y=reduce?0:Math.sin(t*1.1)*.08;
+      const p=pg.attributes.position.array;
+      for(let i=0;i<N;i++){p[i*3+1]+=spd[i];p[i*3]+=Math.sin(t+i)*.0015;if(p[i*3+1]>3.5)p[i*3+1]=-3.5}
+      pg.attributes.position.needsUpdate=true;
+      dust.rotation.y=cx*.3;
+      renderer.render(scene,camera);
+      if(reduce){running=false;return}
+      requestAnimationFrame(frame);
+    })();
+  }
+  loop();
+})();
+</script>
+
+</body>
+</html>

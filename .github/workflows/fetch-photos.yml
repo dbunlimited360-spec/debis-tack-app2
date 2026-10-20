@@ -2,7 +2,7 @@ name: Fetch website photos
 on:
   push:
     branches: [website-photos]
-    paths: [photos/list.txt]
+    paths: [photos/list.txt, .github/workflows/fetch-photos.yml]
 permissions:
   contents: write
 jobs:
@@ -15,13 +15,14 @@ jobs:
           cd photos
           while read -r id url; do
             [ -z "$id" ] && continue
-            ext="${url || echo "failed $id"
+            ext="${url##*.}"
+            curl -sSfL --retry 3 -o "$id.$ext" "$url" || echo "failed $id"
           done < list.txt
           ls | wc -l
       - name: Commit
         run: |
           git config user.name "photo-bot"
           git config user.email "photo-bot@users.noreply.github.com"
-          git add photos/*.jpg
-          git commit -m "Add website product photos" || echo "nothing"
+          git add photos/
+          git commit -m "Add website images" || echo "nothing"
           git push

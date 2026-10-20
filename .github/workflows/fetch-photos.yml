@@ -15,7 +15,7 @@ jobs:
           cd photos
           while read -r id url; do
             [ -z "$id" ] && continue
-            curl -sSfL --retry 3 -o "$id.jpg" "$url" || echo "failed $id"
+            ext="${url || echo "failed $id"
           done < list.txt
           ls | wc -l
       - name: Commit
